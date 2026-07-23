@@ -20,7 +20,11 @@ export function LoginForm() {
     setStatus('sending');
     const { error } = await supabase.auth.signInWithOtp({
       email,
-      options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
+      options: {
+        // Create the account on first sign-in — one flow for login and signup.
+        shouldCreateUser: true,
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
+      },
     });
     if (error) {
       setStatus('error');
@@ -32,18 +36,19 @@ export function LoginForm() {
 
   if (status === 'sent') {
     return (
-      <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-5 py-4 text-sm text-emerald-800 dark:text-emerald-300">
-        ✓ Check your email — we sent a magic sign-in link to{' '}
-        <span className="font-semibold">{email}</span>.
+      <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-5 py-4 text-sm text-emerald-300">
+        ✓ Check your email — we sent a one-time sign-in link to{' '}
+        <span className="font-semibold">{email}</span>. Open it on this device to finish.
       </div>
     );
   }
 
   if (status === 'unconfigured') {
     return (
-      <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 px-5 py-4 text-sm text-amber-800 dark:text-amber-300">
+      <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 px-5 py-4 text-sm text-amber-300">
         Sign-in isn&apos;t configured yet — set <code>NEXT_PUBLIC_SUPABASE_URL</code> and{' '}
-        <code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code>.
+        <code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code> (the Vercel–Supabase integration sets these
+        automatically).
       </div>
     );
   }
@@ -51,26 +56,27 @@ export function LoginForm() {
   return (
     <form onSubmit={onSubmit} className="space-y-3">
       <label className="block">
-        <span className="text-sm font-medium">Work email</span>
+        <span className="text-sm font-medium text-zinc-200">Work email</span>
         <input
           type="email"
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="you@company.com"
-          className="mt-1 w-full rounded-lg border border-neutral-300 bg-white px-4 py-3 text-sm outline-none focus:border-neutral-900 dark:border-neutral-700 dark:bg-neutral-900 dark:focus:border-white"
+          autoComplete="email"
+          className="mt-1 w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-sm text-zinc-100 outline-none transition placeholder:text-zinc-500 focus:border-white/40"
         />
       </label>
       <button
         type="submit"
         disabled={status === 'sending'}
-        className="w-full rounded-lg bg-neutral-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-neutral-700 disabled:opacity-60 dark:bg-white dark:text-neutral-900"
+        className="w-full rounded-lg bg-zinc-50 px-5 py-3 text-sm font-semibold text-zinc-950 transition hover:bg-white disabled:opacity-60"
       >
-        {status === 'sending' ? 'Sending link…' : 'Email me a magic link'}
+        {status === 'sending' ? 'Sending link…' : 'Continue with email'}
       </button>
-      {status === 'error' && <p className="text-xs text-red-600 dark:text-red-400">{message}</p>}
-      <p className="text-xs text-neutral-500">
-        No passwords. We&apos;ll email you a one-time sign-in link.
+      {status === 'error' && <p className="text-xs text-red-400">{message}</p>}
+      <p className="text-xs text-zinc-500">
+        No passwords. The link both signs you in and creates your account if you&apos;re new.
       </p>
     </form>
   );
