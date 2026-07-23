@@ -49,6 +49,10 @@ function headers(serviceKey: string, extra: Record<string, string> = {}): Header
     'Content-Type': 'application/json',
     apikey: serviceKey,
     Authorization: `Bearer ${serviceKey}`,
+    // Target the isolated OurAI schema (reads use Accept-Profile, writes use
+    // Content-Profile) so PostgREST never touches `public`.
+    'Accept-Profile': 'ourai',
+    'Content-Profile': 'ourai',
     ...extra,
   };
 }
