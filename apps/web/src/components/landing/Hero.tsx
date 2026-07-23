@@ -1,4 +1,5 @@
 import { WaitlistForm } from './WaitlistForm';
+import { WaitlistCount } from './WaitlistCount';
 
 export function Hero() {
   return (
@@ -31,6 +32,7 @@ export function Hero() {
 
         <div id="waitlist" className="mt-8 flex flex-col items-center gap-3">
           <WaitlistForm source="hero" />
+          <WaitlistCount />
         </div>
 
         <dl className="mx-auto mt-12 grid max-w-3xl grid-cols-3 gap-4 border-t border-neutral-200 pt-8 text-center dark:border-neutral-800">
