@@ -13,13 +13,19 @@ export function SiteNav() {
           <Logo size={26} />
           {site.name}
         </Link>
-        <div className="hidden items-center gap-7 text-sm text-zinc-400 md:flex">
-          <a href="#how-it-works" className="transition hover:text-zinc-50">
+        <div className="hidden items-center gap-6 text-sm text-zinc-400 lg:flex">
+          <Link href="/#how-it-works" className="transition hover:text-zinc-50">
             How it works
-          </a>
-          <a href="#why" className="transition hover:text-zinc-50">
+          </Link>
+          <Link href="/#why" className="transition hover:text-zinc-50">
             Why OurAI
-          </a>
+          </Link>
+          <Link href="/integrations" className="transition hover:text-zinc-50">
+            Integrations
+          </Link>
+          <Link href="/compare" className="transition hover:text-zinc-50">
+            Compare
+          </Link>
           <Link href="/tech" className="transition hover:text-zinc-50">
             Tech
           </Link>
@@ -42,12 +48,12 @@ export function SiteNav() {
           >
             Sign in
           </Link>
-          <a
-            href="#waitlist"
+          <Link
+            href="/#waitlist"
             className="rounded-lg bg-zinc-50 px-4 py-2 text-sm font-semibold text-zinc-950 transition hover:bg-white"
           >
             Get early access
-          </a>
+          </Link>
         </div>
       </nav>
     </header>

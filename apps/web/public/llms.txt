@@ -20,9 +20,22 @@
 - **Priced per agent, not per seat:** watchers are free; cost scales with agent-compute, roughly 10–18× cheaper than frontier-model tools.
 - **Open source core:** AGPL-3.0 core you can self-host, Apache-2.0 SDK to build on.
 
+## Integrations
+
+- Bring your own key for model providers: DeepSeek (default), Anthropic Claude, Moonshot Kimi, and OpenAI — swap via one env var through the model gateway.
+- Data & auth: Supabase (Postgres, magic-link auth, row-level security, Realtime). Analytics: PostHog. Email: Resend. Hosting & CI: Vercel and GitHub. See https://ourai.dev/integrations.
+
+## How OurAI compares
+
+- vs GitHub Copilot: Copilot is a per-seat in-editor copilot for one developer; OurAI puts the whole team in one live session and is priced per agent.
+- vs Devin: Devin runs solo and opaque; OurAI streams every step to a shared transcript and never merges without a human.
+- vs Cursor: Cursor optimizes one developer's editor; OurAI runs many agents in parallel on isolated branches for a whole team. See https://ourai.dev/compare.
+
 ## Key links
 
 - Homepage: https://ourai.dev
+- Integrations (model providers & services): https://ourai.dev/integrations
+- Compare (vs Copilot, Devin, Cursor): https://ourai.dev/compare
 - Tech stack (developer deep-dive): https://ourai.dev/tech
 - Contact: https://ourai.dev/contact
 - GitHub: https://github.com/MAKaminski/OurAI

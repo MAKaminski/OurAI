@@ -1,8 +1,11 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import type { SupabaseClient } from '@supabase/supabase-js';
+import { resolveSupabaseAnonKey, resolveSupabaseUrl, supabaseConfigured } from './env';
 
 type CookieToSet = { name: string; value: string; options?: CookieOptions };
+
+export { supabaseConfigured };
 
 /**
  * Server (RSC / route handler) Supabase config. Kept for the persistence
@@ -10,13 +13,9 @@ type CookieToSet = { name: string; value: string; options?: CookieOptions };
  */
 export function getServerSupabaseConfig() {
   return {
-    url: process.env.NEXT_PUBLIC_SUPABASE_URL ?? '',
-    anonKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '',
+    url: resolveSupabaseUrl(),
+    anonKey: resolveSupabaseAnonKey(),
   };
-}
-
-export function supabaseConfigured(): boolean {
-  return Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
 }
 
 /**
@@ -26,8 +25,8 @@ export function supabaseConfigured(): boolean {
  * Returns null when Supabase isn't configured (keeps builds green without env).
  */
 export async function getSupabaseServerClient(): Promise<SupabaseClient | null> {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const url = resolveSupabaseUrl();
+  const anon = resolveSupabaseAnonKey();
   if (!url || !anon) return null;
 
   const cookieStore = await cookies();

@@ -12,7 +12,19 @@ export function Footer() {
             © {site.company} — {site.tagline}.
           </p>
         </div>
-        <div className="flex items-center gap-6">
+        <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+          <Link href="/integrations" className="transition hover:text-zinc-100">
+            Integrations
+          </Link>
+          <Link href="/compare" className="transition hover:text-zinc-100">
+            Compare
+          </Link>
+          <Link href="/tech" className="transition hover:text-zinc-100">
+            Tech
+          </Link>
+          <Link href="/contact" className="transition hover:text-zinc-100">
+            Contact
+          </Link>
           <a
             href={site.github}
             target="_blank"
@@ -21,15 +33,9 @@ export function Footer() {
           >
             GitHub
           </a>
-          <Link href="/tech" className="transition hover:text-zinc-100">
-            Tech
-          </Link>
-          <Link href="/contact" className="transition hover:text-zinc-100">
-            Contact
-          </Link>
-          <a href="#waitlist" className="transition hover:text-zinc-100">
+          <Link href="/#waitlist" className="transition hover:text-zinc-100">
             Early access
-          </a>
+          </Link>
         </div>
       </div>
     </footer>

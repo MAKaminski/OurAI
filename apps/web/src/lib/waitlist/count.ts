@@ -4,13 +4,15 @@
  * doesn't hit the database on every request. Returns null when Supabase isn't
  * configured (the counter then stays hidden).
  */
+import { resolveSupabaseUrl } from '@/lib/supabase/env';
+
 let cached: { at: number; count: number | null } | null = null;
 const TTL_MS = 60_000;
 
 export async function getWaitlistCount(): Promise<number | null> {
   if (cached && Date.now() - cached.at < TTL_MS) return cached.count;
 
-  const url = process.env.SUPABASE_URL;
+  const url = resolveSupabaseUrl();
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!url || !key) return null;
 
