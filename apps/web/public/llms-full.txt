@@ -39,6 +39,9 @@ Data model hierarchy: Company (= one GitHub repo) → Idea (inbox → triaged �
 
 ## Links
 
+- Homepage: https://ourai.dev
+- Tech stack (developer deep-dive): https://ourai.dev/tech
+- Contact: https://ourai.dev/contact
 - GitHub: https://github.com/MAKaminski/OurAI
-- Company: Modular Equity.
+- Company: OurAI.
 - Status: early access; join the waitlist on the homepage.

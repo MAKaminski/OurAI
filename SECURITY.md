@@ -7,7 +7,7 @@
 Instead, report them privately via one of:
 
 - GitHub's [private vulnerability reporting](https://github.com/MAKaminski/OurAI/security/advisories/new)
-- Email: **michael@modularequity.com**
+- Our [contact form](https://ourai.dev/contact)
 
 Please include:
 

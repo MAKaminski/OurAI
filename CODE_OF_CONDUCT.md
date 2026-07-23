@@ -45,9 +45,9 @@ an individual is officially representing the community in public spaces.
 ## Enforcement
 
 Instances of abusive, harassing, or otherwise unacceptable behavior may be
-reported to the community leaders responsible for enforcement at
-**michael@modularequity.com**. All complaints will be reviewed and investigated
-promptly and fairly.
+reported to the community leaders responsible for enforcement via our
+[contact form](https://ourai.dev/contact). All complaints will be reviewed and
+investigated promptly and fairly.
 
 ## Attribution
 

@@ -22,5 +22,7 @@ export const site = {
   ],
   twitter: '@ourai',
   github: 'https://github.com/MAKaminski/OurAI',
-  company: 'Modular Equity',
+  company: 'OurAI',
+  /** Public-facing contact route — we never expose a raw support email. */
+  contactPath: '/contact',
 } as const;

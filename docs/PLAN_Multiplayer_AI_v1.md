@@ -1,7 +1,7 @@
 # Multiplayer AI — Build Plan v1
 
 **Codename:** (working) *Atrium* — one room, one repo, one agent, many people.
-**Owner:** Michael Kaminski / Modular Equity
+**Owner:** OurAI
 **Date:** 2026-07-23
 **Scope of this document:** Strategy + architecture plan only (no code written). YC Class of '26 theme #1 of 3 (*Multiplayer AI*). Themes #2 (*Cloud for Small Software*) and #3 (*Self-Maintaining APIs*) are explicitly deferred and layer on top of this foundation later.
 

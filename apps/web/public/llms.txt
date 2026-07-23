@@ -22,6 +22,9 @@
 
 ## Key links
 
+- Homepage: https://ourai.dev
+- Tech stack (developer deep-dive): https://ourai.dev/tech
+- Contact: https://ourai.dev/contact
 - GitHub: https://github.com/MAKaminski/OurAI
 - Roadmap and architecture: see the /docs directory in the repository.
 
