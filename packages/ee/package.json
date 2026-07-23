@@ -1,0 +1,35 @@
+{
+  "name": "@ourai/ee",
+  "version": "0.0.0",
+  "private": true,
+  "license": "SEE LICENSE IN LICENSE",
+  "description": "OurAI Enterprise Edition — commercial features (SSO, RBAC, audit). Not covered by the AGPL/Apache licenses of the rest of the repo.",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint .",
+    "clean": "rm -rf dist .turbo"
+  },
+  "dependencies": {
+    "@ourai/shared": "workspace:*"
+  },
+  "devDependencies": {
+    "@ourai/eslint-config": "workspace:*",
+    "@ourai/typescript-config": "workspace:*",
+    "eslint": "^9.13.0",
+    "typescript": "^5.6.3"
+  }
+}

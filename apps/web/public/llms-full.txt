@@ -1,0 +1,44 @@
+# OurAI — full reference for AI answer engines
+
+> OurAI is the multiplayer AI workspace where a whole cross-functional team watches and steers AI coding agents over one GitHub repo in real time, from idea intake to shipped software.
+
+## The end-to-end loop
+
+1. **Idea intake.** Anyone on the team drops an idea into the company's inbox. Project management / idea intake is the deliberate front door — you decide *what* to build before building it.
+2. **AI-refined requirements.** Product chats the idea into a real specification; the AI asks the business the right clarifying questions and drafts acceptance criteria and edge cases.
+3. **Promote to a branch.** When the spec is ready, product promotes the idea to a public branch — the work becomes real and schedulable.
+4. **Plan with a clear cost–benefit.** A project manager schedules the work and makes the cost/benefit of shipping explicit (estimated agent cost vs. projected impact), assigning tracks to devs and QA.
+5. **Build in parallel.** Each track runs its own AI agent on its own branch/worktree. A capped pool (default three concurrent agents) keeps cost predictable. The whole team watches every transcript stream live and can steer any agent by injecting a message.
+6. **AI rightsizes merges.** As branches land, AI rebalances the remaining work, hands teammates new to-dos, and rebases dependent branches so parallel work merges in the correct order without conflicts.
+7. **Shipped.** A human approves the final merge and it ships. Nothing reaches the main branch without explicit human approval.
+8. **Measured results.** Outcomes — signups, activation, conversion — are tracked in analytics (PostHog), closing the loop from idea to measurable impact.
+
+## Architecture (for technical readers)
+
+- **Web client** (Next.js): the transcript UI, presence, idea board, outstanding-work/branch view, diff preview, and merge button.
+- **Sync fabric** (Supabase Postgres + Realtime, behind a pluggable PersistenceAdapter): an append-only `events` log that fans out to every connected client; late-joiners get full history for free.
+- **Orchestrator** (always-on worker): a capped agent pool, one git worktree per agent, a work queue, and a monthly budget guard.
+- **Model gateway** (pluggable ModelProvider): DeepSeek by default; switchable to Kimi, Anthropic, or others with one environment variable.
+- **Tools**: filesystem, git (worktree/branch/commit/merge/diff), shell, and GitHub, each bound to an agent's isolated worktree.
+
+Data model hierarchy: Company (= one GitHub repo) → Idea (inbox → triaged → promoted → shipped) → Work item (one branch + one agent) → Session (one agent run) → Events (append-only transcript).
+
+## Differentiation
+
+- Multiplayer by design — the team, not one developer, ships together.
+- Idea intake first — requirements are refined with the business before code.
+- Parallel agents with human-approved, AI-rightsized merges.
+- Consumption pricing per agent, not per seat — roughly 10–18× cheaper than frontier-model coding tools.
+- Open-core: AGPL-3.0 core (self-hostable), Apache-2.0 SDK, commercial enterprise edition.
+
+## Licensing
+
+- Core (app, realtime, orchestrator): AGPL-3.0.
+- SDK: Apache-2.0.
+- Enterprise features (SSO/SAML, RBAC, audit logs): commercial license.
+
+## Links
+
+- GitHub: https://github.com/MAKaminski/OurAI
+- Company: Modular Equity.
+- Status: early access; join the waitlist on the homepage.

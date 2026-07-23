@@ -1,0 +1,11 @@
+{
+  "name": "@ourai/typescript-config",
+  "version": "0.0.0",
+  "private": true,
+  "license": "Apache-2.0",
+  "files": [
+    "base.json",
+    "nextjs.json",
+    "node-library.json"
+  ]
+}

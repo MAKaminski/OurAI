@@ -1,0 +1,31 @@
+# Path-based auto-labeling (actions/labeler v5 syntax).
+'area: web':
+  - changed-files:
+      - any-glob-to-any-file: 'apps/web/**'
+'area: orchestrator':
+  - changed-files:
+      - any-glob-to-any-file: 'apps/orchestrator/**'
+'area: persistence':
+  - changed-files:
+      - any-glob-to-any-file: 'packages/persistence/**'
+'area: model-gateway':
+  - changed-files:
+      - any-glob-to-any-file: 'packages/model-gateway/**'
+'area: agent-core':
+  - changed-files:
+      - any-glob-to-any-file: 'packages/agent-core/**'
+'area: tools':
+  - changed-files:
+      - any-glob-to-any-file: 'packages/tools/**'
+'area: sdk':
+  - changed-files:
+      - any-glob-to-any-file: 'packages/sdk/**'
+documentation:
+  - changed-files:
+      - any-glob-to-any-file: ['docs/**', '**/*.md']
+'area: infra':
+  - changed-files:
+      - any-glob-to-any-file: ['infra/**', 'docker-compose.yml']
+'area: ci':
+  - changed-files:
+      - any-glob-to-any-file: '.github/**'

@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light dark;
+}
+
+body {
+  font-family:
+    ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+@keyframes ourai-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ourai-grow {
+  from {
+    width: 0;
+  }
+}
+
+.ourai-fade-up {
+  animation: ourai-fade-up 0.5s ease both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ourai-fade-up {
+    animation: none;
+  }
+}
