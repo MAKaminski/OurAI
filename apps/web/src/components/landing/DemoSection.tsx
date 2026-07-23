@@ -1,17 +1,18 @@
 import { DemoWalkthrough } from './demo/DemoWalkthrough';
+import { Reveal } from '@/components/motion/Reveal';
 
 export function DemoSection() {
   return (
-    <section id="how-it-works" className="mx-auto max-w-6xl px-6 py-20">
-      <div className="mx-auto max-w-2xl text-center">
-        <h2 className="text-3xl font-semibold tracking-tight">
+    <section id="demo" className="mx-auto max-w-6xl px-6 py-20">
+      <Reveal className="mx-auto max-w-2xl text-center">
+        <h2 className="text-3xl font-semibold tracking-tight text-zinc-50">
           From an idea to shipped — watch the whole loop
         </h2>
-        <p className="mt-3 text-neutral-600 dark:text-neutral-400">
+        <p className="mt-3 text-zinc-400">
           One idea moves through your whole team and a fleet of AI agents, and ends as a measured
           result. Here&apos;s the full story in eight steps.
         </p>
-      </div>
+      </Reveal>
       <div className="mt-12">
         {/*
           Real product videos can be embedded per step by dropping an <video>

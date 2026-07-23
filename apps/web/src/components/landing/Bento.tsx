@@ -1,7 +1,9 @@
+import type { ReactNode } from 'react';
+import { Stagger, StaggerItem } from '@/components/motion/Stagger';
+
 /**
  * Capability bento — an asymmetric grid so it doesn't read as a generic
- * feature list. The lead cell restates the multiplayer thesis; the rest are
- * concrete, checkable capabilities.
+ * feature list. Cells stagger in on scroll; hover lifts the border/tint.
  */
 export function Bento() {
   return (
@@ -15,9 +17,9 @@ export function Bento() {
         </h2>
       </div>
 
-      <div className="mt-14 grid auto-rows-[minmax(0,1fr)] gap-4 md:grid-cols-3">
+      <Stagger className="mt-14 grid auto-rows-[minmax(0,1fr)] gap-4 md:grid-cols-3">
         {/* Lead cell */}
-        <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-blue-500/10 via-transparent to-violet-500/10 p-8 md:col-span-2 md:row-span-2">
+        <StaggerItem className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-blue-500/10 via-transparent to-violet-500/10 p-8 transition-colors hover:border-white/25 md:col-span-2 md:row-span-2">
           <div className="flex items-center gap-2 font-mono text-xs">
             <span className="rounded bg-blue-500/15 px-1.5 py-0.5 text-blue-400">humans</span>
             <span className="text-zinc-600">+</span>
@@ -42,7 +44,7 @@ export function Bento() {
               <span className="text-zinc-600">✓</span> human approves · shipped
             </p>
           </div>
-        </div>
+        </StaggerItem>
 
         <BentoCell
           title="Priced per agent, not per seat"
@@ -68,16 +70,16 @@ export function Bento() {
           title="Open source core"
           body="AGPL core you can self-host, an Apache-licensed SDK to build on. Inspect everything."
         />
-      </div>
+      </Stagger>
     </section>
   );
 }
 
-function BentoCell({ title, body }: { title: string; body: string }) {
+function BentoCell({ title, body }: { title: ReactNode; body: ReactNode }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-[#0e0e10] p-6 transition hover:border-white/20">
+    <StaggerItem className="rounded-2xl border border-white/10 bg-[#0e0e10] p-6 transition-colors hover:border-white/25 hover:bg-white/[0.02]">
       <h3 className="text-base font-semibold text-zinc-100">{title}</h3>
       <p className="mt-2 text-sm leading-relaxed text-zinc-400">{body}</p>
-    </div>
+    </StaggerItem>
   );
 }

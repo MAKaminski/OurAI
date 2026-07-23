@@ -32,6 +32,12 @@ export const FLAGS = {
     defaultValue: true,
     description: 'Social-proof pre-signup counter on the landing page.',
   },
+  siteMotion: {
+    key: 'site-motion',
+    defaultValue: true,
+    description:
+      'Marketing-site motion layer: smooth scroll, scroll reveals, count-ups, marquee, pinned sequence. Kill switch + A/B.',
+  },
 } as const satisfies Record<string, FlagDefinition>;
 
 export type FlagName = keyof typeof FLAGS;

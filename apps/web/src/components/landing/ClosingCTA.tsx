@@ -1,5 +1,6 @@
 import { WaitlistForm } from './WaitlistForm';
 import { WaitlistCount } from './WaitlistCount';
+import { Reveal } from '@/components/motion/Reveal';
 
 /**
  * Closing CTA — the one place we allow a restrained blue→violet glow, echoing
@@ -12,7 +13,7 @@ export function ClosingCTA() {
         aria-hidden
         className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-[420px] bg-[radial-gradient(60%_80%_at_50%_120%,rgba(37,99,235,0.18),transparent),radial-gradient(50%_70%_at_50%_120%,rgba(124,58,237,0.16),transparent)]"
       />
-      <div className="mx-auto max-w-3xl px-6 py-28 text-center">
+      <Reveal className="mx-auto max-w-3xl px-6 py-28 text-center">
         <h2 className="text-balance text-4xl font-semibold tracking-[-0.02em] text-zinc-50 sm:text-5xl">
           Turn your backlog into shipped software — together.
         </h2>
@@ -27,7 +28,7 @@ export function ClosingCTA() {
         <p className="mt-6 font-mono text-xs text-zinc-600">
           No credit card · Open source core (AGPL-3.0) · Self-hostable
         </p>
-      </div>
+      </Reveal>
     </section>
   );
 }

@@ -1,5 +1,6 @@
 import { SiteNav } from '@/components/landing/SiteNav';
 import { Hero } from '@/components/landing/Hero';
+import { LogoMarquee } from '@/components/landing/LogoMarquee';
 import { Stats } from '@/components/landing/Stats';
 import { Handoff } from '@/components/landing/Handoff';
 import { DemoSection } from '@/components/landing/DemoSection';
@@ -15,6 +16,7 @@ export default function LandingPage() {
       <SiteNav />
       <main>
         <Hero />
+        <LogoMarquee />
         <Stats />
         <Handoff />
         <DemoSection />

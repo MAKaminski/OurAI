@@ -1,11 +1,35 @@
+'use client';
+
 import Link from 'next/link';
+import { useState } from 'react';
+import { useMotionValueEvent, useScroll } from 'motion/react';
 import { site } from '@/lib/site';
 import { Logo } from '@/components/brand/Logo';
 
+/**
+ * Sticky nav that solidifies its background and tightens its padding after a
+ * small scroll — a subtle Rilla-style depth cue. Degrades to a plain sticky
+ * bar when motion is off (the scroll listener is cheap and harmless either way).
+ */
 export function SiteNav() {
+  const [scrolled, setScrolled] = useState(false);
+  const { scrollY } = useScroll();
+  useMotionValueEvent(scrollY, 'change', (y) => {
+    const next = y > 8;
+    setScrolled((cur) => (cur === next ? cur : next));
+  });
+
   return (
-    <header className="sticky top-0 z-40 border-b border-white/10 bg-[#08080a]/80 backdrop-blur">
-      <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+    <header
+      className={`sticky top-0 z-40 border-b backdrop-blur transition-colors duration-300 ${
+        scrolled ? 'border-white/10 bg-[#08080a]/85' : 'border-transparent bg-[#08080a]/40'
+      }`}
+    >
+      <nav
+        className={`mx-auto flex max-w-6xl items-center justify-between px-6 transition-all duration-300 ${
+          scrolled ? 'py-3' : 'py-4'
+        }`}
+      >
         <Link
           href="/"
           className="flex items-center gap-2 font-semibold tracking-tight text-zinc-50"
