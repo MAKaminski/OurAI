@@ -58,14 +58,22 @@ export function AccountManager({ email, initialOrgs }: { email: string; initialO
           <h1 className="text-2xl font-semibold">Settings & keys</h1>
           <p className="text-sm text-neutral-500">{email}</p>
         </div>
-        <form action="/auth/signout" method="post">
-          <button
-            type="submit"
+        <div className="flex items-center gap-2">
+          <a
+            href="/chat"
             className="rounded-lg border border-neutral-300 px-3 py-1.5 text-sm dark:border-neutral-700"
           >
-            Sign out
-          </button>
-        </form>
+            Chat
+          </a>
+          <form action="/auth/signout" method="post">
+            <button
+              type="submit"
+              className="rounded-lg border border-neutral-300 px-3 py-1.5 text-sm dark:border-neutral-700"
+            >
+              Sign out
+            </button>
+          </form>
+        </div>
       </header>
 
       {/* Scope switcher */}
