@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  color-scheme: light dark;
+  color-scheme: dark;
 }
 
 body {
@@ -32,8 +32,43 @@ body {
   animation: ourai-fade-up 0.5s ease both;
 }
 
+/* Redesign motion — restrained, reduced-motion safe. */
+@keyframes ourai-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes ourai-caret {
+  50% {
+    opacity: 0;
+  }
+}
+
+.ourai-rise {
+  animation: ourai-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.ourai-rise-2 {
+  animation-delay: 0.08s;
+}
+.ourai-rise-3 {
+  animation-delay: 0.16s;
+}
+.ourai-rise-4 {
+  animation-delay: 0.24s;
+}
+.ourai-caret {
+  animation: ourai-caret 1s step-end infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .ourai-fade-up {
+  .ourai-fade-up,
+  .ourai-rise,
+  .ourai-caret {
     animation: none;
   }
 }

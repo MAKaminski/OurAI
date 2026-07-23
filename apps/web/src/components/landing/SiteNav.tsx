@@ -4,33 +4,33 @@ import { Logo } from '@/components/brand/Logo';
 
 export function SiteNav() {
   return (
-    <header className="sticky top-0 z-40 border-b border-neutral-200/60 bg-white/80 backdrop-blur dark:border-neutral-800/60 dark:bg-neutral-950/80">
+    <header className="sticky top-0 z-40 border-b border-white/10 bg-[#08080a]/80 backdrop-blur">
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-        <Link href="/" className="flex items-center gap-2 font-semibold tracking-tight">
+        <Link
+          href="/"
+          className="flex items-center gap-2 font-semibold tracking-tight text-zinc-50"
+        >
           <Logo size={26} />
           {site.name}
         </Link>
-        <div className="hidden items-center gap-6 text-sm text-neutral-600 md:flex dark:text-neutral-400">
-          <a href="#how-it-works" className="hover:text-neutral-900 dark:hover:text-white">
+        <div className="hidden items-center gap-7 text-sm text-zinc-400 md:flex">
+          <a href="#how-it-works" className="transition hover:text-zinc-50">
             How it works
           </a>
-          <a href="#why" className="hover:text-neutral-900 dark:hover:text-white">
+          <a href="#why" className="transition hover:text-zinc-50">
             Why OurAI
           </a>
-          <a href="#features" className="hover:text-neutral-900 dark:hover:text-white">
-            Features
-          </a>
-          <Link href="/tech" className="hover:text-neutral-900 dark:hover:text-white">
+          <Link href="/tech" className="transition hover:text-zinc-50">
             Tech
           </Link>
-          <Link href="/contact" className="hover:text-neutral-900 dark:hover:text-white">
+          <Link href="/contact" className="transition hover:text-zinc-50">
             Contact
           </Link>
           <a
             href={site.github}
             target="_blank"
             rel="noreferrer"
-            className="hover:text-neutral-900 dark:hover:text-white"
+            className="transition hover:text-zinc-50"
           >
             GitHub
           </a>
@@ -38,13 +38,13 @@ export function SiteNav() {
         <div className="flex items-center gap-3">
           <Link
             href="/login"
-            className="text-sm font-medium text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white"
+            className="text-sm font-medium text-zinc-400 transition hover:text-zinc-50"
           >
             Sign in
           </Link>
           <a
             href="#waitlist"
-            className="rounded-lg bg-neutral-900 px-4 py-2 text-sm font-semibold text-white dark:bg-white dark:text-neutral-900"
+            className="rounded-lg bg-zinc-50 px-4 py-2 text-sm font-semibold text-zinc-950 transition hover:bg-white"
           >
             Get early access
           </a>
