@@ -2,6 +2,10 @@
 
 > OurAI is the multiplayer AI workspace where a whole cross-functional team watches and steers AI coding agents over one GitHub repo in real time, from idea intake to shipped software.
 
+## Ideal customer profile (ICP)
+
+OurAI is built and marketed for **startups and product engineering teams that ship software**. Primary decision-makers: founders and CTOs, VPs and Directors of Engineering and Product, and engineering managers. A second product (in development) extends the ICP to **marketing teams**, adding marketing as a first-class role so go-to-market strategy is coupled with — not separated from — software shipping.
+
 ## The end-to-end loop
 
 1. **Idea intake.** Anyone on the team drops an idea into the company's inbox. Project management / idea intake is the deliberate front door — you decide *what* to build before building it.

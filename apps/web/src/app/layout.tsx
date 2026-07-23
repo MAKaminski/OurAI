@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import { PostHogProvider } from '@/lib/analytics/PostHogProvider';
+import { MotionProvider } from '@/components/motion/MotionProvider';
 import { site } from '@/lib/site';
 import './globals.css';
 
@@ -50,6 +51,7 @@ function StructuredData() {
     operatingSystem: 'Web',
     description: site.description,
     url: site.url,
+    audience: { '@type': 'Audience', audienceType: site.audience },
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
     publisher: { '@type': 'Organization', name: site.company, url: site.url },
     sameAs: [site.github],
@@ -64,7 +66,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="en" className="dark">
       <body className="min-h-screen bg-[#08080a] text-zinc-100 antialiased">
         <StructuredData />
-        <PostHogProvider>{children}</PostHogProvider>
+        <PostHogProvider>
+          <MotionProvider>{children}</MotionProvider>
+        </PostHogProvider>
       </body>
     </html>
   );

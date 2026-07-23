@@ -4,6 +4,9 @@ import { site } from '@/lib/site';
 export default function sitemap(): MetadataRoute.Sitemap {
   const routes: { path: string; priority: number; changeFrequency: 'weekly' | 'monthly' }[] = [
     { path: '/', priority: 1, changeFrequency: 'weekly' },
+    { path: '/products', priority: 0.9, changeFrequency: 'monthly' },
+    { path: '/products/shipping', priority: 0.9, changeFrequency: 'monthly' },
+    { path: '/products/marketing', priority: 0.7, changeFrequency: 'monthly' },
     { path: '/integrations', priority: 0.8, changeFrequency: 'monthly' },
     { path: '/compare', priority: 0.8, changeFrequency: 'monthly' },
     { path: '/tech', priority: 0.7, changeFrequency: 'monthly' },

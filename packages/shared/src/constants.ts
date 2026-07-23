@@ -20,6 +20,15 @@ export const ROLE_COLORS: Record<MemberRole, string> = {
   devops: '#d97706',
   sales: '#db2777',
   pm: '#0891b2',
+  marketing: '#f97316',
 };
 
-export const ALL_ROLES: readonly MemberRole[] = ['product', 'dev', 'qa', 'devops', 'sales', 'pm'];
+export const ALL_ROLES: readonly MemberRole[] = [
+  'product',
+  'dev',
+  'qa',
+  'devops',
+  'sales',
+  'pm',
+  'marketing',
+];

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
+import { SiteNav } from '@/components/landing/SiteNav';
+import { Footer } from '@/components/landing/Footer';
 import { ContactForm } from '@/components/contact/ContactForm';
-import { Logo } from '@/components/brand/Logo';
 import { site } from '@/lib/site';
 
 export const metadata: Metadata = {
@@ -12,18 +12,19 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <main className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-6 py-16">
-      <Link href="/" className="mb-8 flex items-center gap-2 font-semibold tracking-tight">
-        <Logo size={26} />
-        {site.name}
-      </Link>
-      <h1 className="text-2xl font-semibold">Contact us</h1>
-      <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
-        Questions, support, or partnerships — send us a note and we&apos;ll reply by email.
-      </p>
-      <div className="mt-8">
-        <ContactForm />
-      </div>
-    </main>
+    <>
+      <SiteNav />
+      <main className="mx-auto flex min-h-[70vh] max-w-md flex-col justify-center px-6 py-16">
+        <span className="font-mono text-xs uppercase tracking-[0.15em] text-zinc-500">Contact</span>
+        <h1 className="mt-4 text-3xl font-semibold tracking-[-0.02em] text-zinc-50">Contact us</h1>
+        <p className="mt-2 text-sm text-zinc-400">
+          Questions, support, or partnerships — send us a note and we&apos;ll reply by email.
+        </p>
+        <div className="mt-8">
+          <ContactForm />
+        </div>
+      </main>
+      <Footer />
+    </>
   );
 }

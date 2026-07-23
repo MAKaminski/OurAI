@@ -2,6 +2,9 @@ import type { Metadata } from 'next';
 import { SiteNav } from '@/components/landing/SiteNav';
 import { Footer } from '@/components/landing/Footer';
 import { TechLogo } from '@/components/brand/TechLogos';
+import { Reveal } from '@/components/motion/Reveal';
+import { Stagger, StaggerItem } from '@/components/motion/Stagger';
+import { MagneticButton } from '@/components/motion/MagneticButton';
 import { site } from '@/lib/site';
 
 export const metadata: Metadata = {
@@ -180,29 +183,34 @@ export default function IntegrationsPage() {
       <FaqJsonLd />
       <SiteNav />
       <main className="mx-auto max-w-5xl px-6 py-16">
-        <span className="font-mono text-xs uppercase tracking-[0.15em] text-zinc-500">
-          Integrations
-        </span>
-        <h1 className="mt-4 max-w-3xl text-balance text-4xl font-semibold tracking-[-0.02em] text-zinc-50 sm:text-5xl">
-          Plug OurAI into the models and tools your team already trusts.
-        </h1>
-        <p className="mt-4 max-w-2xl text-lg text-zinc-400">
-          The multiplayer AI coding workspace is bring-your-own-key and open at every layer — from
-          the model provider to your database, analytics, and CI. Keep your rates, keep your data,
-          and prove the value.
-        </p>
+        <Reveal>
+          <span className="font-mono text-xs uppercase tracking-[0.15em] text-zinc-500">
+            Integrations
+          </span>
+          <h1 className="mt-4 max-w-3xl text-balance text-4xl font-semibold tracking-[-0.02em] text-zinc-50 sm:text-5xl">
+            Plug OurAI into the models and tools your team already trusts.
+          </h1>
+          <p className="mt-4 max-w-2xl text-lg text-zinc-400">
+            The multiplayer AI coding workspace is bring-your-own-key and open at every layer — from
+            the model provider to your database, analytics, and CI. Keep your rates, keep your data,
+            and prove the value.
+          </p>
+        </Reveal>
 
         {/* Persona value framing */}
-        <div className="mt-12 grid gap-4 md:grid-cols-3">
+        <Stagger className="mt-12 grid gap-4 md:grid-cols-3">
           {PERSONAS.map((p) => (
-            <div key={p.role} className="rounded-2xl border border-white/10 bg-[#0e0e10] p-6">
+            <StaggerItem
+              key={p.role}
+              className="rounded-2xl border border-white/10 bg-[#0e0e10] p-6"
+            >
               <h2 className="font-mono text-xs uppercase tracking-[0.15em] text-blue-400">
                 {p.role}
               </h2>
               <p className="mt-3 text-sm leading-relaxed text-zinc-400">{p.body}</p>
-            </div>
+            </StaggerItem>
           ))}
-        </div>
+        </Stagger>
 
         {/* Integration groups */}
         <div className="mt-16 space-y-12">
@@ -212,27 +220,28 @@ export default function IntegrationsPage() {
                 {section.group}
               </h2>
               <p className="mt-2 max-w-2xl text-sm text-zinc-400">{section.blurb}</p>
-              <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              <Stagger className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {section.items.map((it) => (
-                  <a
-                    key={it.name}
-                    href={it.href}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="group flex flex-col rounded-xl border border-white/10 bg-[#0e0e10] p-5 text-zinc-100 transition hover:border-white/25"
-                    aria-label={`${it.name} — visit website`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <TechLogo slug={it.slug} size={32} />
-                      <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-zinc-500">
-                        {it.tag}
-                      </span>
-                    </div>
-                    <span className="mt-4 font-semibold group-hover:underline">{it.name}</span>
-                    <span className="mt-1 text-sm leading-relaxed text-zinc-400">{it.why}</span>
-                  </a>
+                  <StaggerItem key={it.name} className="h-full">
+                    <a
+                      href={it.href}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="group flex h-full flex-col rounded-xl border border-white/10 bg-[#0e0e10] p-5 text-zinc-100 transition hover:border-white/25"
+                      aria-label={`${it.name} — visit website`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <TechLogo slug={it.slug} size={32} />
+                        <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-zinc-500">
+                          {it.tag}
+                        </span>
+                      </div>
+                      <span className="mt-4 font-semibold group-hover:underline">{it.name}</span>
+                      <span className="mt-1 text-sm leading-relaxed text-zinc-400">{it.why}</span>
+                    </a>
+                  </StaggerItem>
                 ))}
-              </div>
+              </Stagger>
             </section>
           ))}
         </div>
@@ -252,17 +261,17 @@ export default function IntegrationsPage() {
           </dl>
         </section>
 
-        <div className="mt-16 rounded-2xl border border-white/10 bg-gradient-to-br from-blue-500/10 to-violet-500/10 p-8 text-center">
+        <Reveal className="mt-16 rounded-2xl border border-white/10 bg-gradient-to-br from-blue-500/10 to-violet-500/10 p-8 text-center">
           <p className="text-lg font-medium text-zinc-100">
             Bring your team, bring your keys — see it move an idea to a merged PR.
           </p>
-          <a
+          <MagneticButton
             href="/#waitlist"
             className="mt-5 inline-flex rounded-lg bg-zinc-50 px-5 py-3 text-sm font-semibold text-zinc-950 transition hover:bg-white"
           >
             Get early access
-          </a>
-        </div>
+          </MagneticButton>
+        </Reveal>
       </main>
       <Footer />
     </>

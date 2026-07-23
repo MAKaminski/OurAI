@@ -13,7 +13,10 @@ export const workItemStatusSchema = z.enum([
 export const createWorkItemSchema = z.object({
   title: z.string().min(1).max(200),
   ideaId: z.string().uuid().nullable().default(null),
-  actingRole: z.enum(['product', 'dev', 'qa', 'devops', 'sales', 'pm']).nullable().default(null),
+  actingRole: z
+    .enum(['product', 'dev', 'qa', 'devops', 'sales', 'pm', 'marketing'])
+    .nullable()
+    .default(null),
 });
 
 export type CreateWorkItemInput = z.infer<typeof createWorkItemSchema>;

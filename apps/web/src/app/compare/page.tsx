@@ -1,6 +1,9 @@
 import type { Metadata } from 'next';
 import { SiteNav } from '@/components/landing/SiteNav';
 import { Footer } from '@/components/landing/Footer';
+import { Reveal } from '@/components/motion/Reveal';
+import { Stagger, StaggerItem } from '@/components/motion/Stagger';
+import { MagneticButton } from '@/components/motion/MagneticButton';
 import { site } from '@/lib/site';
 
 export const metadata: Metadata = {
@@ -60,20 +63,27 @@ export default function ComparePage() {
     <>
       <SiteNav />
       <main className="mx-auto max-w-4xl px-6 py-16">
-        <span className="font-mono text-xs uppercase tracking-[0.15em] text-zinc-500">Compare</span>
-        <h1 className="mt-4 max-w-3xl text-balance text-4xl font-semibold tracking-[-0.02em] text-zinc-50 sm:text-5xl">
-          Where OurAI is different — and better.
-        </h1>
-        <p className="mt-4 max-w-2xl text-lg leading-relaxed text-zinc-400">
-          Most AI coding tools make one developer faster inside their editor. {site.name} makes a
-          whole team — product, engineering, design — watch and steer a fleet of agents over one
-          repo, from idea intake to a human-approved merge. Here&apos;s how we compare to the tools
-          teams weigh us against.
-        </p>
+        <Reveal>
+          <span className="font-mono text-xs uppercase tracking-[0.15em] text-zinc-500">
+            Compare
+          </span>
+          <h1 className="mt-4 max-w-3xl text-balance text-4xl font-semibold tracking-[-0.02em] text-zinc-50 sm:text-5xl">
+            Where OurAI is different — and better.
+          </h1>
+          <p className="mt-4 max-w-2xl text-lg leading-relaxed text-zinc-400">
+            Most AI coding tools make one developer faster inside their editor. {site.name} makes a
+            whole team — product, engineering, design — watch and steer a fleet of agents over one
+            repo, from idea intake to a human-approved merge. Here&apos;s how we compare to the
+            tools teams weigh us against.
+          </p>
+        </Reveal>
 
-        <div className="mt-14 space-y-6">
+        <Stagger className="mt-14 space-y-6">
           {COMPETITORS.map((c) => (
-            <section key={c.name} className="rounded-2xl border border-white/10 bg-[#0e0e10] p-7">
+            <StaggerItem
+              key={c.name}
+              className="rounded-2xl border border-white/10 bg-[#0e0e10] p-7"
+            >
               <div className="flex flex-wrap items-baseline justify-between gap-2">
                 <h2 className="text-xl font-semibold text-zinc-50">
                   {site.name} <span className="text-zinc-500">vs</span> {c.name}
@@ -91,21 +101,21 @@ export default function ComparePage() {
                   </li>
                 ))}
               </ul>
-            </section>
+            </StaggerItem>
           ))}
-        </div>
+        </Stagger>
 
-        <div className="mt-14 rounded-2xl border border-white/10 bg-gradient-to-br from-blue-500/10 to-violet-500/10 p-8 text-center">
+        <Reveal className="mt-14 rounded-2xl border border-white/10 bg-gradient-to-br from-blue-500/10 to-violet-500/10 p-8 text-center">
           <p className="text-lg font-medium text-zinc-100">
             The difference is multiplayer. Bring your team and see it.
           </p>
-          <a
+          <MagneticButton
             href="/#waitlist"
             className="mt-5 inline-flex rounded-lg bg-zinc-50 px-5 py-3 text-sm font-semibold text-zinc-950 transition hover:bg-white"
           >
             Get early access
-          </a>
-        </div>
+          </MagneticButton>
+        </Reveal>
       </main>
       <Footer />
     </>

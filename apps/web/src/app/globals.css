@@ -65,10 +65,44 @@ body {
   animation: ourai-caret 1s step-end infinite;
 }
 
+/* Infinite marquee (logo/tech strip). Track holds two identical groups; it
+   translates -50% so the second group seamlessly takes over. */
+.ourai-marquee {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 8%,
+    #000 92%,
+    transparent
+  );
+  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+}
+.ourai-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: ourai-marquee linear infinite;
+}
+.ourai-marquee:hover .ourai-marquee-track {
+  animation-play-state: paused;
+}
+.ourai-marquee-group {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  padding-right: 3rem;
+}
+@keyframes ourai-marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .ourai-fade-up,
   .ourai-rise,
-  .ourai-caret {
+  .ourai-caret,
+  .ourai-marquee-track {
     animation: none;
   }
 }

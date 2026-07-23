@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { SiteNav } from '@/components/landing/SiteNav';
 import { Footer } from '@/components/landing/Footer';
 import { TechLogo } from '@/components/brand/TechLogos';
+import { Reveal } from '@/components/motion/Reveal';
+import { Stagger, StaggerItem } from '@/components/motion/Stagger';
 import { site } from '@/lib/site';
 
 export const metadata: Metadata = {
@@ -153,14 +155,18 @@ export default function TechPage() {
     <>
       <SiteNav />
       <main className="mx-auto max-w-4xl px-6 py-16">
-        <span className="font-mono text-xs uppercase tracking-[0.15em] text-zinc-500">
-          The stack
-        </span>
-        <h1 className="mt-4 text-4xl font-semibold tracking-[-0.02em] text-zinc-50">Built with</h1>
-        <p className="mt-3 max-w-2xl text-zinc-400">
-          A developer&apos;s deep-dive into the {site.name} stack. It&apos;s a Turborepo monorepo
-          (AGPL-3.0 core, Apache-2.0 SDK) — everything below is open and swappable.
-        </p>
+        <Reveal>
+          <span className="font-mono text-xs uppercase tracking-[0.15em] text-zinc-500">
+            The stack
+          </span>
+          <h1 className="mt-4 text-4xl font-semibold tracking-[-0.02em] text-zinc-50">
+            Built with
+          </h1>
+          <p className="mt-3 max-w-2xl text-zinc-400">
+            A developer&apos;s deep-dive into the {site.name} stack. It&apos;s a Turborepo monorepo
+            (AGPL-3.0 core, Apache-2.0 SDK) — everything below is open and swappable.
+          </p>
+        </Reveal>
 
         <div className="mt-12 space-y-10">
           {STACK.map((section) => (
@@ -168,30 +174,31 @@ export default function TechPage() {
               <h2 className="mb-4 font-mono text-xs font-semibold uppercase tracking-[0.15em] text-zinc-500">
                 {section.group}
               </h2>
-              <div className="grid gap-4 sm:grid-cols-2">
+              <Stagger className="grid gap-4 sm:grid-cols-2">
                 {section.items.map((t) => (
-                  <a
-                    key={t.name}
-                    href={t.href}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="group flex items-start gap-4 rounded-xl border border-white/10 bg-[#0e0e10] p-4 text-zinc-100 transition hover:border-white/25"
-                  >
-                    <span className="mt-0.5 flex-none">
-                      <TechLogo slug={t.slug} size={30} />
-                    </span>
-                    <span className="min-w-0">
-                      <span className="flex items-baseline justify-between gap-2">
-                        <span className="font-semibold group-hover:underline">{t.name}</span>
-                        <span className="flex-none font-mono text-xs text-zinc-500">
-                          {t.version}
-                        </span>
+                  <StaggerItem key={t.name} className="h-full">
+                    <a
+                      href={t.href}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="group flex h-full items-start gap-4 rounded-xl border border-white/10 bg-[#0e0e10] p-4 text-zinc-100 transition hover:border-white/25"
+                    >
+                      <span className="mt-0.5 flex-none">
+                        <TechLogo slug={t.slug} size={30} />
                       </span>
-                      <span className="mt-1 block text-sm text-zinc-400">{t.why}</span>
-                    </span>
-                  </a>
+                      <span className="min-w-0">
+                        <span className="flex items-baseline justify-between gap-2">
+                          <span className="font-semibold group-hover:underline">{t.name}</span>
+                          <span className="flex-none font-mono text-xs text-zinc-500">
+                            {t.version}
+                          </span>
+                        </span>
+                        <span className="mt-1 block text-sm text-zinc-400">{t.why}</span>
+                      </span>
+                    </a>
+                  </StaggerItem>
                 ))}
-              </div>
+              </Stagger>
             </section>
           ))}
         </div>
