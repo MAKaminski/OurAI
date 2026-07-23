@@ -17,12 +17,14 @@ const AI_BOTS = [
 ];
 
 export default function robots(): MetadataRoute.Robots {
+  // Private / auth-gated surfaces — kept out of every crawler's index.
+  const disallow = ['/api/', '/account', '/auth/', '/learn', '/chat', '/context', '/companies'];
   return {
     rules: [
-      { userAgent: '*', allow: '/', disallow: ['/api/', '/account', '/auth/'] },
-      // Belt-and-suspenders: explicitly allow the AI crawlers so OurAI is
-      // discoverable and citable across ChatGPT, Claude, Perplexity, Gemini.
-      ...AI_BOTS.map((userAgent) => ({ userAgent, allow: '/' })),
+      { userAgent: '*', allow: '/', disallow },
+      // Belt-and-suspenders: explicitly welcome AI crawlers on public pages so
+      // OurAI is discoverable and citable across ChatGPT, Claude, Perplexity, Gemini.
+      ...AI_BOTS.map((userAgent) => ({ userAgent, allow: '/', disallow })),
     ],
     sitemap: `${site.url}/sitemap.xml`,
     host: site.url,

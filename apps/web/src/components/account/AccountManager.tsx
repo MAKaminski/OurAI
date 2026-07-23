@@ -22,6 +22,7 @@ export function AccountManager({ email, initialOrgs }: { email: string; initialO
   const [error, setError] = useState('');
   const chatEnabled = useFlag('chat');
   const contextEnabled = useFlag('contextManager');
+  const examplesEnabled = useFlag('examples');
 
   async function createOrg(e: React.FormEvent) {
     e.preventDefault();
@@ -62,6 +63,14 @@ export function AccountManager({ email, initialOrgs }: { email: string; initialO
           <p className="text-sm text-neutral-500">{email}</p>
         </div>
         <div className="flex items-center gap-2">
+          {examplesEnabled && (
+            <a
+              href="/learn"
+              className="rounded-lg border border-neutral-300 px-3 py-1.5 text-sm dark:border-neutral-700"
+            >
+              Examples
+            </a>
+          )}
           {contextEnabled && (
             <a
               href="/context"

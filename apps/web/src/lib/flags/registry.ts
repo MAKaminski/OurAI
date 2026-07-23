@@ -38,6 +38,11 @@ export const FLAGS = {
     description:
       'Marketing-site motion layer: smooth scroll, scroll reveals, count-ups, marquee, pinned sequence. Kill switch + A/B.',
   },
+  examples: {
+    key: 'examples',
+    defaultValue: true,
+    description: 'Post-login multi-format example guides (/learn): video, pictures, and wiki.',
+  },
 } as const satisfies Record<string, FlagDefinition>;
 
 export type FlagName = keyof typeof FLAGS;

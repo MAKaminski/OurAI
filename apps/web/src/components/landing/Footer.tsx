@@ -28,6 +28,9 @@ export function Footer() {
           <Link href="/contact" className="transition hover:text-zinc-100">
             Contact
           </Link>
+          <Link href="/sitemap" className="transition hover:text-zinc-100">
+            Sitemap
+          </Link>
           <a
             href={site.github}
             target="_blank"

@@ -10,11 +10,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/integrations', priority: 0.8, changeFrequency: 'monthly' },
     { path: '/compare', priority: 0.8, changeFrequency: 'monthly' },
     { path: '/tech', priority: 0.7, changeFrequency: 'monthly' },
+    { path: '/sitemap', priority: 0.3, changeFrequency: 'monthly' },
     { path: '/contact', priority: 0.5, changeFrequency: 'monthly' },
     { path: '/login', priority: 0.4, changeFrequency: 'monthly' },
   ];
+  const lastModified = new Date();
   return routes.map((r) => ({
     url: `${site.url}${r.path === '/' ? '' : r.path}`,
+    lastModified,
     changeFrequency: r.changeFrequency,
     priority: r.priority,
   }));

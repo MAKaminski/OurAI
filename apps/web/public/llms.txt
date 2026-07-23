@@ -1,6 +1,6 @@
 # OurAI
 
-> OurAI is the multiplayer AI workspace where a whole cross-functional team watches and steers AI coding agents over one GitHub repo, in real time — from idea intake all the way to shipped software. You start with a company, intake an idea, let AI refine the requirements with your business, promote it to a branch, and watch multiple agents build in parallel while a human approves every merge.
+> OurAI is an AI-first operating system for teams that ship — supporting two functions: (1) software/product shipping and (2) marketing coordination. It's the multiplayer AI workspace where a whole cross-functional team watches and steers AI coding agents over one GitHub repo, in real time — from idea intake all the way to shipped software. You start with a company, intake an idea, let AI refine the requirements with your business, promote it to a branch, and watch multiple agents build in parallel while a human approves every merge. The second function (in development) adds marketing as a first-class role so go-to-market is coupled with shipping.
 
 ## What OurAI is
 

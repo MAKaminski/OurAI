@@ -43,21 +43,47 @@ export const metadata: Metadata = {
 
 /** JSON-LD structured data — helps both classic search and AI answer engines. */
 function StructuredData() {
-  const json = {
+  const graph = {
     '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
-    name: site.name,
-    applicationCategory: 'DeveloperApplication',
-    operatingSystem: 'Web',
-    description: site.description,
-    url: site.url,
-    audience: { '@type': 'Audience', audienceType: site.audience },
-    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-    publisher: { '@type': 'Organization', name: site.company, url: site.url },
-    sameAs: [site.github],
+    '@graph': [
+      {
+        '@type': 'Organization',
+        '@id': `${site.url}/#org`,
+        name: site.company,
+        url: site.url,
+        logo: `${site.url}/icon`,
+        description: site.positioning,
+        sameAs: [site.github],
+      },
+      {
+        '@type': 'WebSite',
+        '@id': `${site.url}/#website`,
+        name: site.name,
+        url: site.url,
+        publisher: { '@id': `${site.url}/#org` },
+        description: site.description,
+      },
+      {
+        '@type': 'SoftwareApplication',
+        name: site.name,
+        applicationCategory: 'DeveloperApplication',
+        applicationSubCategory: 'AI-first operating system',
+        operatingSystem: 'Web',
+        description: site.description,
+        url: site.url,
+        featureList: [...site.featureList],
+        audience: { '@type': 'Audience', audienceType: site.audience },
+        offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+        publisher: { '@id': `${site.url}/#org` },
+        sameAs: [site.github],
+      },
+    ],
   };
   return (
-    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(json) }} />
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(graph) }}
+    />
   );
 }
 
