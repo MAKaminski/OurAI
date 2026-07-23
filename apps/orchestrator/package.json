@@ -1,0 +1,31 @@
+{
+  "name": "@ourai/orchestrator",
+  "version": "0.0.0",
+  "private": true,
+  "license": "AGPL-3.0-only",
+  "type": "module",
+  "main": "./dist/index.js",
+  "scripts": {
+    "dev": "tsc -p tsconfig.json --watch",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint .",
+    "clean": "rm -rf dist .turbo"
+  },
+  "dependencies": {
+    "@ourai/agent-core": "workspace:*",
+    "@ourai/model-gateway": "workspace:*",
+    "@ourai/persistence": "workspace:*",
+    "@ourai/shared": "workspace:*",
+    "@ourai/tools": "workspace:*",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@ourai/eslint-config": "workspace:*",
+    "@ourai/typescript-config": "workspace:*",
+    "@types/node": "^22.7.5",
+    "eslint": "^9.13.0",
+    "typescript": "^5.6.3"
+  }
+}

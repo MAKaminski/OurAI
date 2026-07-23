@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Discord community
+    url: https://discord.gg/
+    about: Ask questions and chat with the community.
+  - name: 📖 Documentation
+    url: https://github.com/MAKaminski/OurAI/tree/main/docs
+    about: Read the plan, architecture, and roadmap.
+  - name: 🔒 Report a security issue
+    url: https://github.com/MAKaminski/OurAI/security/advisories/new
+    about: Please report vulnerabilities privately, not as public issues.

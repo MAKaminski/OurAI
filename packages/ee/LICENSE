@@ -1,0 +1,22 @@
+OurAI Enterprise Edition License
+================================
+
+Copyright (c) 2026 Modular Equity (Michael Kaminski). All rights reserved.
+
+This directory (`packages/ee`) and its contents (the "Enterprise Software") are
+NOT licensed under the AGPL-3.0 or Apache-2.0 licenses that cover the rest of
+this repository. The Enterprise Software is commercial software.
+
+You may not use, copy, modify, merge, publish, distribute, sublicense, or sell
+copies of the Enterprise Software except under the terms of a separate
+commercial agreement with Modular Equity.
+
+Absent such an agreement, you are granted a limited, non-exclusive,
+non-transferable license to view the source code in this directory for
+evaluation and reference purposes only. No production use is permitted.
+
+For commercial licensing, contact: michael@modularequity.com
+
+THE ENTERPRISE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.

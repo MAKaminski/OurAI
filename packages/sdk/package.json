@@ -1,0 +1,35 @@
+{
+  "name": "@ourai/sdk",
+  "version": "0.0.0",
+  "private": true,
+  "license": "Apache-2.0",
+  "description": "Public client SDK for OurAI. Apache-2.0 licensed to maximize embedding.",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint .",
+    "clean": "rm -rf dist .turbo"
+  },
+  "dependencies": {
+    "@ourai/shared": "workspace:*"
+  },
+  "devDependencies": {
+    "@ourai/eslint-config": "workspace:*",
+    "@ourai/typescript-config": "workspace:*",
+    "eslint": "^9.13.0",
+    "typescript": "^5.6.3"
+  }
+}

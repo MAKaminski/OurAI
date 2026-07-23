@@ -1,0 +1,42 @@
+name: E2E
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  playwright:
+    name: Playwright
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check for e2e tests
+        id: check
+        run: |
+          if [ -d "apps/web/e2e" ]; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "present=false" >> "$GITHUB_OUTPUT"
+            echo "No e2e suite yet (apps/web/e2e absent) — skipping. Wired in Phase 1a."
+          fi
+
+      - uses: pnpm/action-setup@v4
+        if: steps.check.outputs.present == 'true'
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        if: steps.check.outputs.present == 'true'
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install
+        if: steps.check.outputs.present == 'true'
+        run: pnpm install --frozen-lockfile
+
+      - name: Run Playwright
+        if: steps.check.outputs.present == 'true'
+        run: pnpm --filter @ourai/web exec playwright test
