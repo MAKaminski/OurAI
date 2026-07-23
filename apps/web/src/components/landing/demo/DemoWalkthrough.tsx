@@ -50,15 +50,15 @@ export function DemoWalkthrough() {
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      {/* Step rail */}
-      <ol className="mb-6 flex flex-wrap items-center justify-center gap-2">
+      {/* Step rail — an even grid (2×4 / 4×2) so it never orphans a last item */}
+      <ol className="mx-auto mb-6 grid max-w-3xl grid-cols-2 gap-2 sm:grid-cols-4">
         {SCENES.map((s, i) => (
           <li key={s.id}>
             <button
               type="button"
               onClick={() => go(i)}
               aria-current={i === active}
-              className={`rounded-full px-3 py-1 text-xs font-medium transition ${
+              className={`w-full truncate rounded-lg px-3 py-1.5 text-center text-xs font-medium transition ${
                 i === active
                   ? 'bg-neutral-900 text-white dark:bg-white dark:text-neutral-900'
                   : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-700'
