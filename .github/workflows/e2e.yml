@@ -22,7 +22,7 @@ jobs:
             echo "No e2e suite yet (apps/web/e2e absent) — skipping. Wired in Phase 1a."
           fi
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         if: steps.check.outputs.present == 'true'
         with:
           version: 10
