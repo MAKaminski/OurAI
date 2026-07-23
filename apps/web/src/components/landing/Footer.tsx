@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { site } from '@/lib/site';
 
 export function Footer() {
@@ -16,6 +17,12 @@ export function Footer() {
           >
             GitHub
           </a>
+          <Link href="/tech" className="hover:text-neutral-900 dark:hover:text-white">
+            Tech
+          </Link>
+          <Link href="/contact" className="hover:text-neutral-900 dark:hover:text-white">
+            Contact
+          </Link>
           <a href="#waitlist" className="hover:text-neutral-900 dark:hover:text-white">
             Early access
           </a>

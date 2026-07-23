@@ -1,12 +1,13 @@
 import Link from 'next/link';
 import { site } from '@/lib/site';
+import { Logo } from '@/components/brand/Logo';
 
 export function SiteNav() {
   return (
     <header className="sticky top-0 z-40 border-b border-neutral-200/60 bg-white/80 backdrop-blur dark:border-neutral-800/60 dark:bg-neutral-950/80">
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <Link href="/" className="flex items-center gap-2 font-semibold tracking-tight">
-          <span className="inline-block h-6 w-6 rounded-md bg-neutral-900 dark:bg-white" />
+          <Logo size={26} />
           {site.name}
         </Link>
         <div className="hidden items-center gap-6 text-sm text-neutral-600 md:flex dark:text-neutral-400">
@@ -19,6 +20,12 @@ export function SiteNav() {
           <a href="#features" className="hover:text-neutral-900 dark:hover:text-white">
             Features
           </a>
+          <Link href="/tech" className="hover:text-neutral-900 dark:hover:text-white">
+            Tech
+          </Link>
+          <Link href="/contact" className="hover:text-neutral-900 dark:hover:text-white">
+            Contact
+          </Link>
           <a
             href={site.github}
             target="_blank"
