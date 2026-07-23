@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { captureServerEvent } from '@/lib/analytics/server';
+import { resolveSupabaseUrl } from '@/lib/supabase/env';
 
 interface WaitlistBody {
   email?: string;
@@ -45,7 +46,7 @@ async function persistWaitlist(
   role: string | null,
   source: string | null,
 ): Promise<void> {
-  const url = process.env.SUPABASE_URL;
+  const url = resolveSupabaseUrl();
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!url || !key) return;
   try {

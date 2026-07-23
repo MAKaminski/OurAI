@@ -4,6 +4,7 @@ import {
   encryptionConfigured,
   maskSecret,
 } from '@/lib/crypto/secrets';
+import { resolveSupabaseUrl } from '@/lib/supabase/env';
 
 /** A setting as returned to the client — sensitive values are masked, never raw. */
 export interface CompanySetting {
@@ -28,7 +29,7 @@ interface SupabaseRow {
 }
 
 function supabase(): { url: string; key: string } | null {
-  const url = process.env.SUPABASE_URL;
+  const url = resolveSupabaseUrl();
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!url || !key) return null;
   return { url, key };

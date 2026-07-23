@@ -61,8 +61,8 @@ function StructuredData() {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
-      <body className="min-h-screen bg-white text-neutral-900 antialiased dark:bg-neutral-950 dark:text-neutral-100">
+    <html lang="en" className="dark">
+      <body className="min-h-screen bg-[#08080a] text-zinc-100 antialiased">
         <StructuredData />
         <PostHogProvider>{children}</PostHogProvider>
       </body>
