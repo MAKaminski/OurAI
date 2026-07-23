@@ -51,6 +51,7 @@ function StructuredData() {
     operatingSystem: 'Web',
     description: site.description,
     url: site.url,
+    audience: { '@type': 'Audience', audienceType: site.audience },
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
     publisher: { '@type': 'Organization', name: site.company, url: site.url },
     sameAs: [site.github],

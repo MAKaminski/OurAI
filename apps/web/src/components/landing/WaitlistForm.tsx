@@ -81,6 +81,7 @@ export function WaitlistForm({ source = 'hero' }: { source?: string }) {
           <option value="product">Product</option>
           <option value="engineering">Engineering</option>
           <option value="design">Design</option>
+          <option value="marketing">Marketing</option>
           <option value="other">Other</option>
         </select>
       </div>

@@ -38,11 +38,11 @@ export function SiteNav() {
           {site.name}
         </Link>
         <div className="hidden items-center gap-6 text-sm text-zinc-400 lg:flex">
+          <Link href="/products" className="transition hover:text-zinc-50">
+            Products
+          </Link>
           <Link href="/#how-it-works" className="transition hover:text-zinc-50">
             How it works
-          </Link>
-          <Link href="/#why" className="transition hover:text-zinc-50">
-            Why OurAI
           </Link>
           <Link href="/integrations" className="transition hover:text-zinc-50">
             Integrations

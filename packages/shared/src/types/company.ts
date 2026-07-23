@@ -20,7 +20,7 @@ export interface Company {
 export type NewCompany = Omit<Company, 'id' | 'createdAt'>;
 
 /** Cosmetic role in Phase 1 — drives the "act as" label + presence color. */
-export type MemberRole = 'product' | 'dev' | 'qa' | 'devops' | 'sales' | 'pm';
+export type MemberRole = 'product' | 'dev' | 'qa' | 'devops' | 'sales' | 'pm' | 'marketing';
 
 export interface CompanyMember {
   companyId: CompanyId;

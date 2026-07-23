@@ -8,9 +8,11 @@
 - The unit of work starts as an **idea** (project management / idea intake is the front door), becomes a **work item** on its own branch, and is built by an **agent** whose every action streams to a shared, append-only transcript that the whole team reads live.
 - One company maps to one GitHub repository. Multiple agents run in parallel, each isolated on its own git worktree/branch. A human reviews the diff and approves every merge — there is no auto-merge.
 
-## Who it is for
+## Who it is for (ICP)
 
-- Cross-functional product teams: product, project management, engineering, QA, design, and go-to-market — all in one room.
+- **Startups and product engineering teams that ship software.** Primary buyers/decision-makers: founders and CTOs, VPs and Directors of Engineering and Product, and engineering managers.
+- Cross-functional product teams: product, project management, engineering, QA, design, marketing, and go-to-market — all in one room.
+- A second product (in development) extends this to **marketing teams**: marketing joins as a first-class role so go-to-market strategy is coordinated alongside — coupled with — software shipping, not separated from it.
 
 ## How it is different
 
@@ -34,6 +36,9 @@
 ## Key links
 
 - Homepage: https://ourai.dev
+- Products (overview): https://ourai.dev/products
+- Product — software shipping (how it's used + value): https://ourai.dev/products/shipping
+- Product — marketing coordination (in development): https://ourai.dev/products/marketing
 - Integrations (model providers & services): https://ourai.dev/integrations
 - Compare (vs Copilot, Devin, Cursor): https://ourai.dev/compare
 - Tech stack (developer deep-dive): https://ourai.dev/tech

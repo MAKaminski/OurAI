@@ -13,6 +13,9 @@ export function Footer() {
           </p>
         </div>
         <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+          <Link href="/products" className="transition hover:text-zinc-100">
+            Products
+          </Link>
           <Link href="/integrations" className="transition hover:text-zinc-100">
             Integrations
           </Link>
