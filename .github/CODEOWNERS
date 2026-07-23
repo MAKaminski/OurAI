@@ -1,0 +1,5 @@
+# Default owner for everything in the repo.
+* @MAKaminski
+
+# The commercially-licensed enterprise directory.
+/packages/ee/ @MAKaminski

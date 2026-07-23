@@ -1,0 +1,14 @@
+# Minimal Supabase CLI config for local development.
+# Run `pnpm dlx supabase start` then `pnpm dlx supabase db reset` to apply the
+# migrations in ./migrations.
+project_id = "ourai"
+
+[db]
+port = 54322
+major_version = 16
+
+[realtime]
+enabled = true
+
+[studio]
+enabled = true

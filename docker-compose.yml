@@ -1,0 +1,33 @@
+# Local development stack for OurAI.
+#
+# This brings up a Postgres instance for local iteration. For full Supabase
+# (Auth + Realtime + Studio) locally, prefer the Supabase CLI:
+#   pnpm dlx supabase start
+# which reads infra/supabase/config.toml. This compose file is the minimal,
+# dependency-free path for contributors who only need a database.
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: ourai-postgres
+    restart: unless-stopped
+    # Throwaway local-dev database. Uses trust auth (no password) so there are
+    # no credentials in the repo. Do NOT use this compose file for anything
+    # reachable off localhost.
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-ourai}
+      POSTGRES_DB: ${POSTGRES_DB:-ourai}
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - '5432:5432'
+    volumes:
+      - ourai-pgdata:/var/lib/postgresql/data
+      # Migrations are Supabase-specific (reference the `auth` schema); apply
+      # them with `pnpm dlx supabase db reset`, not the plain-Postgres initdb.
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U $${POSTGRES_USER:-ourai} -d $${POSTGRES_DB:-ourai}']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  ourai-pgdata:

@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.next/
+.turbo/
+coverage/
+pnpm-lock.yaml
+*.md
+docs/PLAN_Multiplayer_AI_v1.md
+docs/PLAN_Multiplayer_AI_v2.md
