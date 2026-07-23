@@ -1,0 +1,30 @@
+# OurAI
+
+> OurAI is the multiplayer AI workspace where a whole cross-functional team watches and steers AI coding agents over one GitHub repo, in real time — from idea intake all the way to shipped software. You start with a company, intake an idea, let AI refine the requirements with your business, promote it to a branch, and watch multiple agents build in parallel while a human approves every merge.
+
+## What OurAI is
+
+- A real-time, multiplayer workspace for building software with AI agents.
+- The unit of work starts as an **idea** (project management / idea intake is the front door), becomes a **work item** on its own branch, and is built by an **agent** whose every action streams to a shared, append-only transcript that the whole team reads live.
+- One company maps to one GitHub repository. Multiple agents run in parallel, each isolated on its own git worktree/branch. A human reviews the diff and approves every merge — there is no auto-merge.
+
+## Who it is for
+
+- Cross-functional product teams: product, project management, engineering, QA, design, and go-to-market — all in one room.
+
+## How it is different
+
+- **Multiplayer, not a solo copilot:** the whole team shares one live transcript.
+- **Idea intake first:** AI refines requirements with the business before code is written.
+- **Parallel agents, safe merges:** branch-per-agent isolation; AI rightsizes and rebalances work; humans approve merges.
+- **Priced per agent, not per seat:** watchers are free; cost scales with agent-compute, roughly 10–18× cheaper than frontier-model tools.
+- **Open source core:** AGPL-3.0 core you can self-host, Apache-2.0 SDK to build on.
+
+## Key links
+
+- GitHub: https://github.com/MAKaminski/OurAI
+- Roadmap and architecture: see the /docs directory in the repository.
+
+## Status
+
+- Early access / pre-signup. Join the waitlist on the homepage.
