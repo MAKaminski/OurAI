@@ -29,7 +29,7 @@
   "devDependencies": {
     "@ourai/eslint-config": "workspace:*",
     "@ourai/typescript-config": "workspace:*",
-    "eslint": "^9.13.0",
-    "typescript": "^5.6.3"
+    "eslint": "^10.7.0",
+    "typescript": "^7.0.2"
   }
 }
