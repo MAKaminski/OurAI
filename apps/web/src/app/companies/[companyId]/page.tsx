@@ -9,6 +9,7 @@ export default async function CompanyHomePage({
   const nav = [
     { href: `/companies/${companyId}/ideas`, label: 'Ideas' },
     { href: `/companies/${companyId}/work`, label: 'Outstanding work' },
+    { href: `/companies/${companyId}/settings`, label: 'Settings' },
   ];
   return (
     <main className="mx-auto max-w-3xl px-6 py-16">
