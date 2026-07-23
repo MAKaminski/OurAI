@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { SecretsManager, type Scope } from './SecretsManager';
+import { useFlag } from '@/lib/flags/useFlag';
 
 interface Org {
   id: string;
@@ -19,6 +20,8 @@ export function AccountManager({ email, initialOrgs }: { email: string; initialO
   const [newName, setNewName] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
+  const chatEnabled = useFlag('chat');
+  const contextEnabled = useFlag('contextManager');
 
   async function createOrg(e: React.FormEvent) {
     e.preventDefault();
@@ -59,12 +62,22 @@ export function AccountManager({ email, initialOrgs }: { email: string; initialO
           <p className="text-sm text-neutral-500">{email}</p>
         </div>
         <div className="flex items-center gap-2">
-          <a
-            href="/chat"
-            className="rounded-lg border border-neutral-300 px-3 py-1.5 text-sm dark:border-neutral-700"
-          >
-            Chat
-          </a>
+          {contextEnabled && (
+            <a
+              href="/context"
+              className="rounded-lg border border-neutral-300 px-3 py-1.5 text-sm dark:border-neutral-700"
+            >
+              Context
+            </a>
+          )}
+          {chatEnabled && (
+            <a
+              href="/chat"
+              className="rounded-lg border border-neutral-300 px-3 py-1.5 text-sm dark:border-neutral-700"
+            >
+              Chat
+            </a>
+          )}
           <form action="/auth/signout" method="post">
             <button
               type="submit"
