@@ -11,7 +11,7 @@ export function getSupabaseBrowserClient(): SupabaseClient | null {
   if (cached !== undefined) return cached;
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  cached = url && anon ? createBrowserClient(url, anon) : null;
+  cached = url && anon ? createBrowserClient(url, anon, { db: { schema: 'ourai' } }) : null;
   return cached;
 }
 

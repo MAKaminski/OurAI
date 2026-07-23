@@ -32,6 +32,8 @@ export async function getSupabaseServerClient(): Promise<SupabaseClient | null> 
 
   const cookieStore = await cookies();
   return createServerClient(url, anon, {
+    // All OurAI tables live in the isolated `ourai` schema — never `public`.
+    db: { schema: 'ourai' },
     cookies: {
       getAll() {
         return cookieStore.getAll();

@@ -21,6 +21,7 @@ export async function getWaitlistCount(): Promise<number | null> {
       headers: {
         apikey: key,
         Authorization: `Bearer ${key}`,
+        'Accept-Profile': 'ourai',
         Prefer: 'count=exact',
         Range: '0-0',
       },

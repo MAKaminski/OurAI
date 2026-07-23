@@ -55,6 +55,7 @@ async function persistWaitlist(
         'Content-Type': 'application/json',
         apikey: key,
         Authorization: `Bearer ${key}`,
+        'Content-Profile': 'ourai',
         Prefer: 'resolution=merge-duplicates',
       },
       body: JSON.stringify({ email, role, source }),
