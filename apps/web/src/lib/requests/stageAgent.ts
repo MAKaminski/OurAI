@@ -7,7 +7,7 @@ import {
   type TokenUsage,
 } from '@ourai/model-gateway';
 import { stageAgentOutputSchema, type ArtifactStage, type StageArtifactInput } from '@ourai/shared';
-import { resolveCredential, stripFence } from './modelCredential';
+import { stripFence, withModelFallback } from './modelCredential';
 
 /** Per-stage instruction: what the agent produces and the shape of each item. */
 const STAGE_PROMPT: Record<ArtifactStage, string> = {
@@ -74,28 +74,28 @@ export async function runStageAgent(
   prior: PriorContext[],
   signal?: AbortSignal,
 ): Promise<StageAgentResult> {
-  const { provider, apiKey } = await resolveCredential(supabase, userId);
-  const modelId = defaultModelId(provider);
-  const client = createProvider({ provider, apiKey });
-
   const messages: ChatMessage[] = [
     { role: 'system', content: `${STAGE_PROMPT[stage]} ${OUTPUT_CONTRACT}` },
     { role: 'user', content: contextBlock(request, prior) },
   ];
 
-  const res = await client.chat({ model: modelId, messages, temperature: 0.4, signal });
+  // Try each configured provider in order (fallback on a dead/errored key).
+  return withModelFallback(supabase, userId, async ({ provider, apiKey }) => {
+    const modelId = defaultModelId(provider);
+    const client = createProvider({ provider, apiKey });
+    const res = await client.chat({ model: modelId, messages, temperature: 0.4, signal });
 
-  const raw = res.message.content ?? '';
-  let parsedJson: unknown;
-  try {
-    parsedJson = JSON.parse(stripFence(raw));
-  } catch {
-    throw new Error(`model did not return valid JSON for the ${stage} stage`);
-  }
-  const parsed = stageAgentOutputSchema.safeParse(parsedJson);
-  if (!parsed.success) {
-    throw new Error(`model ${stage} output failed validation: ${parsed.error.message}`);
-  }
-
-  return { items: parsed.data.items, provider, modelId, usage: res.usage };
+    const raw = res.message.content ?? '';
+    let parsedJson: unknown;
+    try {
+      parsedJson = JSON.parse(stripFence(raw));
+    } catch {
+      throw new Error(`model did not return valid JSON for the ${stage} stage`);
+    }
+    const parsed = stageAgentOutputSchema.safeParse(parsedJson);
+    if (!parsed.success) {
+      throw new Error(`model ${stage} output failed validation: ${parsed.error.message}`);
+    }
+    return { items: parsed.data.items, provider, modelId, usage: res.usage };
+  });
 }

@@ -7,7 +7,7 @@ import {
   type TokenUsage,
 } from '@ourai/model-gateway';
 import { kpiAgentOutputSchema, type KpiInput } from '@ourai/shared';
-import { resolveCredential, stripFence } from './modelCredential';
+import { stripFence, withModelFallback } from './modelCredential';
 
 export { ModelKeyMissingError } from './modelCredential';
 
@@ -41,28 +41,28 @@ export async function runKpiAgent(
   request: { title: string; body: string | null },
   signal?: AbortSignal,
 ): Promise<KpiAgentResult> {
-  const { provider, apiKey } = await resolveCredential(supabase, userId);
-  const modelId = defaultModelId(provider);
-  const client = createProvider({ provider, apiKey });
-
   const messages: ChatMessage[] = [
     { role: 'system', content: SYSTEM_PROMPT },
     { role: 'user', content: userPrompt(request.title, request.body) },
   ];
 
-  const res = await client.chat({ model: modelId, messages, temperature: 0.3, signal });
+  // Try each configured provider in order (fallback on a dead/errored key).
+  return withModelFallback(supabase, userId, async ({ provider, apiKey }) => {
+    const modelId = defaultModelId(provider);
+    const client = createProvider({ provider, apiKey });
+    const res = await client.chat({ model: modelId, messages, temperature: 0.3, signal });
 
-  const raw = res.message.content ?? '';
-  let parsedJson: unknown;
-  try {
-    parsedJson = JSON.parse(stripFence(raw));
-  } catch {
-    throw new Error('model did not return valid JSON for KPIs');
-  }
-  const parsed = kpiAgentOutputSchema.safeParse(parsedJson);
-  if (!parsed.success) {
-    throw new Error(`model KPI output failed validation: ${parsed.error.message}`);
-  }
-
-  return { kpis: parsed.data.kpis, provider, modelId, usage: res.usage };
+    const raw = res.message.content ?? '';
+    let parsedJson: unknown;
+    try {
+      parsedJson = JSON.parse(stripFence(raw));
+    } catch {
+      throw new Error('model did not return valid JSON for KPIs');
+    }
+    const parsed = kpiAgentOutputSchema.safeParse(parsedJson);
+    if (!parsed.success) {
+      throw new Error(`model KPI output failed validation: ${parsed.error.message}`);
+    }
+    return { kpis: parsed.data.kpis, provider, modelId, usage: res.usage };
+  });
 }

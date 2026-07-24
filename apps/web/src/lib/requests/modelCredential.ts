@@ -34,10 +34,22 @@ interface SecretRow {
  * user-scoped vault key (RLS-scoped `secrets`), falling back to a deployment env
  * var for local/dev. Throws `ModelKeyMissingError` when nothing is found.
  */
-export async function resolveCredential(
+export interface ModelCredential {
+  provider: ModelProviderName;
+  apiKey: string;
+}
+
+/**
+ * All usable model credentials for the caller, in preference order (cheapest
+ * capable first). Prefers each provider's user-scoped vault key, then a
+ * deployment env var. The agents try these in order and fall through to the next
+ * on failure, so a dead key (e.g. a 402 out-of-balance DeepSeek account) doesn't
+ * block a request when another provider key is configured. Empty when none set.
+ */
+export async function resolveCredentials(
   supabase: SupabaseClient,
   userId: string,
-): Promise<{ provider: ModelProviderName; apiKey: string }> {
+): Promise<ModelCredential[]> {
   const { data, error } = await supabase
     .from('secrets')
     .select('key,encrypted_value,value')
@@ -50,16 +62,39 @@ export async function resolveCredential(
   if (error) throw new Error(`resolve model key failed: ${error.message}`);
 
   const rows = (data ?? []) as SecretRow[];
+  const creds: ModelCredential[] = [];
   for (const { provider, secretKey } of PROVIDER_KEYS) {
     const row = rows.find((r) => r.key === secretKey);
-    if (row) {
-      const apiKey = row.encrypted_value ? decryptSecret(row.encrypted_value) : (row.value ?? '');
-      if (apiKey) return { provider, apiKey };
-    }
-    const envKey = process.env[secretKey];
-    if (envKey) return { provider, apiKey: envKey };
+    const fromVault = row?.encrypted_value
+      ? decryptSecret(row.encrypted_value)
+      : (row?.value ?? '');
+    const apiKey = fromVault || process.env[secretKey] || '';
+    if (apiKey) creds.push({ provider, apiKey });
   }
-  throw new ModelKeyMissingError();
+  return creds;
+}
+
+/**
+ * Run `attempt` against each configured credential in order, returning the first
+ * success. If every provider fails, throws the last error; if none is configured,
+ * throws `ModelKeyMissingError`. This is what makes provider fallback work.
+ */
+export async function withModelFallback<T>(
+  supabase: SupabaseClient,
+  userId: string,
+  attempt: (cred: ModelCredential) => Promise<T>,
+): Promise<T> {
+  const creds = await resolveCredentials(supabase, userId);
+  if (creds.length === 0) throw new ModelKeyMissingError();
+  let lastErr: unknown;
+  for (const cred of creds) {
+    try {
+      return await attempt(cred);
+    } catch (err) {
+      lastErr = err;
+    }
+  }
+  throw lastErr instanceof Error ? lastErr : new Error(String(lastErr));
 }
 
 /** Strip an accidental ```json fence so JSON.parse succeeds on model output. */
