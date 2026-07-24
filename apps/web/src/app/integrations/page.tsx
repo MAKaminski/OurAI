@@ -44,7 +44,7 @@ const GROUPS: { group: string; blurb: string; items: Integration[] }[] = [
       {
         name: 'DeepSeek',
         slug: 'deepseek',
-        href: 'https://www.deepseek.com',
+        href: 'https://www.deepseek.com/en/',
         tag: 'Default model',
         why: 'Best cost-to-quality for agentic coding — the default, and cheap to run at team scale.',
       },
