@@ -27,6 +27,12 @@ export function Hero() {
             steers, and a human approves every merge.
           </p>
 
+          <p className="ourai-rise ourai-rise-3 mt-4 max-w-xl text-sm text-zinc-500">
+            The AI-first operating system for two functions:{' '}
+            <span className="text-zinc-300">shipping software</span> and{' '}
+            <span className="text-zinc-300">marketing</span>.
+          </p>
+
           <div id="waitlist" className="ourai-rise ourai-rise-4 mt-8 flex flex-col gap-3">
             <WaitlistForm source="hero" />
             <WaitlistCount />

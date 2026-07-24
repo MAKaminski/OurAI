@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { SiteNav } from '@/components/landing/SiteNav';
 import { Footer } from '@/components/landing/Footer';
+import { Breadcrumbs } from '@/components/landing/Breadcrumbs';
 import { WaitlistForm } from '@/components/landing/WaitlistForm';
 import { FeatureBlock, MonoPanel } from '@/components/product/FeatureBlock';
 import { Reveal } from '@/components/motion/Reveal';
@@ -40,6 +41,15 @@ export default function MarketingProductPage() {
   return (
     <>
       <SiteNav />
+      <div className="mx-auto max-w-6xl px-6 pt-6">
+        <Breadcrumbs
+          items={[
+            { name: 'Home', href: '/' },
+            { name: 'Products', href: '/products' },
+            { name: 'Marketing coordination', href: '/products/marketing' },
+          ]}
+        />
+      </div>
       <main>
         {/* Hero */}
         <section className="relative overflow-hidden">

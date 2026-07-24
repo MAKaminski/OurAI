@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { SiteNav } from '@/components/landing/SiteNav';
 import { Footer } from '@/components/landing/Footer';
+import { Breadcrumbs } from '@/components/landing/Breadcrumbs';
 import { LiveTranscript } from '@/components/landing/LiveTranscript';
 import { WhoItsFor } from '@/components/landing/WhoItsFor';
 import { Stats } from '@/components/landing/Stats';
@@ -80,11 +81,56 @@ function FaqJsonLd() {
   );
 }
 
+/** Product + HowTo structured data — strong rich-result / AI-answer signal. */
+function ProductJsonLd() {
+  const graph = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Product',
+        name: `${site.name} — Software shipping`,
+        description:
+          'The multiplayer AI workspace: intake an idea, refine the spec, and ship it over one repo with human-approved merges.',
+        brand: { '@type': 'Brand', name: site.name },
+        url: `${site.url}/products/shipping`,
+        offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+      },
+      {
+        '@type': 'HowTo',
+        name: 'How OurAI ships software',
+        description: 'From idea intake to a merged, measured PR.',
+        step: STEPS.map((s, i) => ({
+          '@type': 'HowToStep',
+          position: i + 1,
+          name: s.title,
+          text: s.body,
+        })),
+      },
+    ],
+  };
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(graph) }}
+    />
+  );
+}
+
 export default function ShippingProductPage() {
   return (
     <>
       <FaqJsonLd />
+      <ProductJsonLd />
       <SiteNav />
+      <div className="mx-auto max-w-6xl px-6 pt-6">
+        <Breadcrumbs
+          items={[
+            { name: 'Home', href: '/' },
+            { name: 'Products', href: '/products' },
+            { name: 'Software shipping', href: '/products/shipping' },
+          ]}
+        />
+      </div>
       <main>
         {/* Hero */}
         <section className="relative overflow-hidden">

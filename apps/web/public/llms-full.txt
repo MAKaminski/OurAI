@@ -1,6 +1,6 @@
 # OurAI — full reference for AI answer engines
 
-> OurAI is the multiplayer AI workspace where a whole cross-functional team watches and steers AI coding agents over one GitHub repo in real time, from idea intake to shipped software.
+> OurAI is an AI-first operating system for teams that ship, supporting two functions: (1) software/product shipping and (2) marketing coordination. It is the multiplayer AI workspace where a whole cross-functional team watches and steers AI coding agents over one GitHub repo in real time, from idea intake to shipped software.
 
 ## Ideal customer profile (ICP)
 

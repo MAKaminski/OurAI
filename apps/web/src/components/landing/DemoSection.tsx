@@ -1,5 +1,6 @@
-import { DemoWalkthrough } from './demo/DemoWalkthrough';
+import { VideoDemo } from '@/components/demo/VideoDemo';
 import { Reveal } from '@/components/motion/Reveal';
+import { site } from '@/lib/site';
 
 export function DemoSection() {
   return (
@@ -14,12 +15,9 @@ export function DemoSection() {
         </p>
       </Reveal>
       <div className="mt-12">
-        {/*
-          Real product videos can be embedded per step by dropping an <video>
-          (or a hosted embed) into the DemoWalkthrough stage. Until then this
-          animated walkthrough plays the same story end to end.
-        */}
-        <DemoWalkthrough />
+        {/* Swappable: plays a real recording when site.demoVideo is set, else
+            the animated walkthrough tells the same story end to end. */}
+        <VideoDemo src={site.demoVideo || undefined} />
       </div>
     </section>
   );

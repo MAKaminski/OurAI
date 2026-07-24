@@ -66,10 +66,6 @@ export function Bento() {
           title="Bring your own keys"
           body="Your models, your keys — stored encrypted and scoped per org and per person. Never shared."
         />
-        <BentoCell
-          title="Open source core"
-          body="AGPL core you can self-host, an Apache-licensed SDK to build on. Inspect everything."
-        />
       </Stagger>
     </section>
   );
