@@ -26,6 +26,9 @@ export default async function AccountPage() {
     <div>
       {/* The path into the product: companies live here, admin only for admins. */}
       <nav className="mx-auto flex max-w-2xl items-center gap-4 px-6 pt-8 text-sm font-medium">
+        <Link href="/dashboard" className="underline">
+          Home
+        </Link>
         <Link href="/companies" className="underline">
           Your companies →
         </Link>

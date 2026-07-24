@@ -26,6 +26,9 @@ export default async function CompaniesPage() {
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-2xl font-semibold">Your companies</h1>
         <div className="flex items-center gap-3">
+          <Link href="/dashboard" className="text-sm underline">
+            Home
+          </Link>
           {isAdmin(user) ? (
             <Link href="/admin" className="text-sm text-amber-600 underline dark:text-amber-400">
               Admin
