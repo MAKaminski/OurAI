@@ -15,9 +15,9 @@ export interface Scope {
 }
 
 /**
- * Common model-provider keys with a direct link to where each provider shows
- * the user their API key. Clicking the name prefills the canonical KEY; the ↗
- * opens that provider's key page for easy access.
+ * Common model-provider keys shown as prominent quick-add cards. "Add" (or the
+ * label) prefills the canonical KEY and marks it sensitive; "Get key ↗" opens
+ * that provider's API-key page.
  */
 const PROVIDER_KEYS: { label: string; keyName: string; url: string }[] = [
   { label: 'DeepSeek', keyName: 'DEEPSEEK_API_KEY', url: 'https://platform.deepseek.com/api_keys' },
@@ -48,6 +48,7 @@ export function SecretsManager({ scope, hint }: { scope: Scope; hint: string }) 
   const [value, setValue] = useState('');
   const [isSensitive, setIsSensitive] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [encReady, setEncReady] = useState(true);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -57,6 +58,7 @@ export function SecretsManager({ scope, hint }: { scope: Scope; hint: string }) 
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? 'failed to load');
       setSecrets(data.secrets ?? []);
+      setEncReady(data.encryptionConfigured !== false);
     } catch (e) {
       setError(String(e));
     } finally {
@@ -101,6 +103,60 @@ export function SecretsManager({ scope, hint }: { scope: Scope; hint: string }) 
     <div>
       <p className="mb-4 text-sm text-neutral-500">{hint}</p>
 
+      {!encReady && isSensitive && (
+        <div className="mb-4 rounded-lg border border-amber-300/50 bg-amber-50 px-4 py-3 text-sm text-amber-800 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-300">
+          Sensitive values (API keys) can&apos;t be saved yet — the server is missing its encryption
+          key (<code>SETTINGS_ENCRYPTION_KEY</code>). Once it&apos;s set, saving keys works.
+          Non-sensitive values still save now.
+        </div>
+      )}
+
+      {/* Prominent quick-add: pick a provider to start adding its key. */}
+      <div className="mb-4 rounded-xl border border-neutral-200 p-4 dark:border-neutral-800">
+        <div className="mb-3 text-sm font-medium">Add a model provider key</div>
+        <div className="grid gap-2 sm:grid-cols-2">
+          {PROVIDER_KEYS.map((p) => (
+            <div
+              key={p.keyName}
+              className="flex items-center justify-between gap-2 rounded-lg border border-neutral-200 px-3 py-2 dark:border-neutral-800"
+            >
+              <button
+                type="button"
+                onClick={() => {
+                  setKey(p.keyName);
+                  setIsSensitive(true);
+                }}
+                className="min-w-0 text-left"
+              >
+                <div className="text-sm font-medium">{p.label}</div>
+                <code className="text-xs text-neutral-500">{p.keyName}</code>
+              </button>
+              <div className="flex shrink-0 items-center gap-2">
+                <a
+                  href={p.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={`Open the ${p.label} API keys page`}
+                  className="text-xs text-neutral-400 transition hover:text-neutral-900 dark:hover:text-white"
+                >
+                  Get key ↗
+                </a>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setKey(p.keyName);
+                    setIsSensitive(true);
+                  }}
+                  className="rounded-md bg-neutral-900 px-2.5 py-1 text-xs font-semibold text-white dark:bg-white dark:text-neutral-900"
+                >
+                  Add
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
       <form
         onSubmit={add}
         className="grid gap-2 rounded-xl border border-neutral-200 p-4 sm:grid-cols-[1fr_1fr_auto] dark:border-neutral-800"
@@ -134,31 +190,6 @@ export function SecretsManager({ scope, hint }: { scope: Scope; hint: string }) 
           Sensitive (encrypted at rest, hidden — e.g. API keys & passwords)
         </label>
       </form>
-
-      <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs text-neutral-500">
-        <span>Get an API key:</span>
-        {PROVIDER_KEYS.map((p) => (
-          <span key={p.keyName} className="inline-flex items-center gap-1">
-            <button
-              type="button"
-              onClick={() => setKey(p.keyName)}
-              title={`Use ${p.keyName}`}
-              className="underline-offset-2 hover:text-neutral-900 hover:underline dark:hover:text-white"
-            >
-              {p.label}
-            </button>
-            <a
-              href={p.url}
-              target="_blank"
-              rel="noreferrer"
-              aria-label={`Open the ${p.label} API keys page`}
-              className="text-neutral-400 transition hover:text-neutral-900 dark:hover:text-white"
-            >
-              ↗
-            </a>
-          </span>
-        ))}
-      </div>
 
       {error && <p className="mt-3 text-xs text-red-600 dark:text-red-400">{error}</p>}
 

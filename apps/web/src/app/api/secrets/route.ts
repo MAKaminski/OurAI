@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getSupabaseServerClient } from '@/lib/supabase/server';
 import { deleteSecret, listSecrets, upsertSecret, type SecretScope } from '@/lib/secrets/store';
+import { encryptionConfigured } from '@/lib/crypto/secrets';
 import type { SupabaseClient, User } from '@supabase/supabase-js';
 
 export const dynamic = 'force-dynamic';
@@ -39,7 +40,12 @@ export async function GET(request: Request) {
   const ownerId = ownerFor(scope, orgId, a.user.id);
   if (!ownerId) return NextResponse.json({ error: 'orgId required' }, { status: 400 });
   try {
-    return NextResponse.json({ secrets: await listSecrets(a.supabase, scope, ownerId) });
+    return NextResponse.json({
+      secrets: await listSecrets(a.supabase, scope, ownerId),
+      // So the UI can warn up-front that sensitive values (API keys) can't be
+      // saved until the server has an encryption key, instead of failing on save.
+      encryptionConfigured: encryptionConfigured(),
+    });
   } catch (err) {
     return NextResponse.json({ error: String(err) }, { status: 500 });
   }
