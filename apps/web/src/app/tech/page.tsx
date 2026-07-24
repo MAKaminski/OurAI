@@ -104,7 +104,7 @@ const STACK: { group: string; items: Tech[] }[] = [
         slug: 'deepseek',
         version: 'default model',
         why: 'Best cost/quality for agentic coding.',
-        href: 'https://www.deepseek.com',
+        href: 'https://www.deepseek.com/en/',
       },
       {
         name: 'Model gateway',
