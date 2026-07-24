@@ -13,6 +13,38 @@ export const PROVIDER_KEYS: ReadonlyArray<{ provider: ModelProviderName; secretK
   { provider: 'anthropic', secretKey: 'ANTHROPIC_API_KEY' },
 ];
 
+/** Providers that can appear in a company's ranked order, in the default order. */
+export const MODEL_PROVIDERS: ModelProviderName[] = PROVIDER_KEYS.map((p) => p.provider);
+
+/** Human labels for the provider ids (UI + messages). */
+export const PROVIDER_LABEL: Record<ModelProviderName, string> = {
+  deepseek: 'DeepSeek',
+  kimi: 'Kimi (Moonshot)',
+  anthropic: 'Claude (Anthropic)',
+};
+
+/**
+ * Normalize a saved/requested provider order into a complete, valid list: keep
+ * known providers in the given order, drop unknowns, and append any known
+ * providers that were omitted (in default order) so a newly-added provider still
+ * works even if it isn't in an older saved preference.
+ */
+export function normalizeProviderOrder(
+  order: readonly string[] | null | undefined,
+): ModelProviderName[] {
+  const known = new Set(MODEL_PROVIDERS);
+  const seen = new Set<ModelProviderName>();
+  const result: ModelProviderName[] = [];
+  for (const p of order ?? []) {
+    if (known.has(p as ModelProviderName) && !seen.has(p as ModelProviderName)) {
+      result.push(p as ModelProviderName);
+      seen.add(p as ModelProviderName);
+    }
+  }
+  for (const p of MODEL_PROVIDERS) if (!seen.has(p)) result.push(p);
+  return result;
+}
+
 export class ModelKeyMissingError extends Error {
   constructor() {
     super(
@@ -46,9 +78,14 @@ export interface ModelCredential {
  * on failure, so a dead key (e.g. a 402 out-of-balance DeepSeek account) doesn't
  * block a request when another provider key is configured. Empty when none set.
  */
+const SECRET_KEY_FOR: Record<ModelProviderName, string> = Object.fromEntries(
+  PROVIDER_KEYS.map((p) => [p.provider, p.secretKey]),
+) as Record<ModelProviderName, string>;
+
 export async function resolveCredentials(
   supabase: SupabaseClient,
   userId: string,
+  order?: readonly string[] | null,
 ): Promise<ModelCredential[]> {
   const { data, error } = await supabase
     .from('secrets')
@@ -63,7 +100,10 @@ export async function resolveCredentials(
 
   const rows = (data ?? []) as SecretRow[];
   const creds: ModelCredential[] = [];
-  for (const { provider, secretKey } of PROVIDER_KEYS) {
+  // Resolve in the (normalized) preferred order — the company's ranking, or the
+  // default when none is given.
+  for (const provider of normalizeProviderOrder(order)) {
+    const secretKey = SECRET_KEY_FOR[provider];
     const row = rows.find((r) => r.key === secretKey);
     const fromVault = row?.encrypted_value
       ? decryptSecret(row.encrypted_value)
@@ -82,9 +122,10 @@ export async function resolveCredentials(
 export async function withModelFallback<T>(
   supabase: SupabaseClient,
   userId: string,
+  order: readonly string[] | null,
   attempt: (cred: ModelCredential) => Promise<T>,
 ): Promise<T> {
-  const creds = await resolveCredentials(supabase, userId);
+  const creds = await resolveCredentials(supabase, userId, order);
   if (creds.length === 0) throw new ModelKeyMissingError();
   let lastErr: unknown;
   for (const cred of creds) {

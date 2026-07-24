@@ -72,6 +72,7 @@ export async function runStageAgent(
   stage: ArtifactStage,
   request: { title: string; body: string | null },
   prior: PriorContext[],
+  order?: readonly string[] | null,
   signal?: AbortSignal,
 ): Promise<StageAgentResult> {
   const messages: ChatMessage[] = [
@@ -79,8 +80,9 @@ export async function runStageAgent(
     { role: 'user', content: contextBlock(request, prior) },
   ];
 
-  // Try each configured provider in order (fallback on a dead/errored key).
-  return withModelFallback(supabase, userId, async ({ provider, apiKey }) => {
+  // Try each configured provider in the company's ranked order (fallback on a
+  // dead/errored key).
+  return withModelFallback(supabase, userId, order ?? null, async ({ provider, apiKey }) => {
     const modelId = defaultModelId(provider);
     const client = createProvider({ provider, apiKey });
     const res = await client.chat({ model: modelId, messages, temperature: 0.4, signal });

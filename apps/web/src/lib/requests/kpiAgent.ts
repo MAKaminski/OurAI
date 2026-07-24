@@ -39,6 +39,7 @@ export async function runKpiAgent(
   supabase: SupabaseClient,
   userId: string,
   request: { title: string; body: string | null },
+  order?: readonly string[] | null,
   signal?: AbortSignal,
 ): Promise<KpiAgentResult> {
   const messages: ChatMessage[] = [
@@ -46,8 +47,9 @@ export async function runKpiAgent(
     { role: 'user', content: userPrompt(request.title, request.body) },
   ];
 
-  // Try each configured provider in order (fallback on a dead/errored key).
-  return withModelFallback(supabase, userId, async ({ provider, apiKey }) => {
+  // Try each configured provider in the company's ranked order (fallback on a
+  // dead/errored key).
+  return withModelFallback(supabase, userId, order ?? null, async ({ provider, apiKey }) => {
     const modelId = defaultModelId(provider);
     const client = createProvider({ provider, apiKey });
     const res = await client.chat({ model: modelId, messages, temperature: 0.3, signal });

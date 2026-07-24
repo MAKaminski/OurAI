@@ -27,6 +27,7 @@ import {
 } from './types';
 import { runKpiAgent } from './kpiAgent';
 import { runStageAgent, type PriorContext } from './stageAgent';
+import { getModelOrder } from '@/lib/companies/modelOrder';
 
 /** Each artifact stage advances to the next request stage on approval. */
 const NEXT_STAGE: Record<ArtifactStage, RequestStage> = {
@@ -233,7 +234,13 @@ export async function runKpiStage(
 
   let result;
   try {
-    result = await runKpiAgent(supabase, userId, { title: request.title, body: request.body });
+    const order = await getModelOrder(supabase, request.companyId);
+    result = await runKpiAgent(
+      supabase,
+      userId,
+      { title: request.title, body: request.body },
+      order,
+    );
   } catch (err) {
     await supabase
       .from('request_stage_runs')
@@ -473,12 +480,14 @@ export async function runAgentStage(
   let result;
   try {
     const prior = await priorContextFor(supabase, requestId, stage);
+    const order = await getModelOrder(supabase, request.companyId);
     result = await runStageAgent(
       supabase,
       userId,
       stage,
       { title: request.title, body: request.body },
       prior,
+      order,
     );
   } catch (err) {
     await supabase
