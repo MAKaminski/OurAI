@@ -71,6 +71,21 @@ export class AnthropicProvider implements ModelProvider {
     this.baseUrl = baseUrl.replace(/\/+$/, '');
   }
 
+  private post(body: Record<string, unknown>, signal?: AbortSignal): Promise<Response> {
+    return fetch(`${this.baseUrl}/v1/messages`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': this.apiKey,
+        'anthropic-version': ANTHROPIC_VERSION,
+      },
+      body: JSON.stringify(body),
+      signal,
+    }).catch((err) => {
+      throw new Error(`anthropic.chat: request failed: ${String(err)}`);
+    });
+  }
+
   async chat(req: ChatRequest, onUsage?: UsageCallback): Promise<ChatResponse> {
     if (!this.apiKey) throw new Error('anthropic.chat: missing API key');
 
@@ -91,20 +106,20 @@ export class AnthropicProvider implements ModelProvider {
     if (system) body.system = system;
     if (typeof req.temperature === 'number') body.temperature = req.temperature;
 
-    let res: Response;
-    try {
-      res = await fetch(`${this.baseUrl}/v1/messages`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': this.apiKey,
-          'anthropic-version': ANTHROPIC_VERSION,
-        },
-        body: JSON.stringify(body),
-        signal: req.signal,
-      });
-    } catch (err) {
-      throw new Error(`anthropic.chat: request failed: ${String(err)}`);
+    let res = await this.post(body, req.signal);
+
+    // The newest Claude models reject `temperature` ("deprecated for this
+    // model"). Rather than hardcode which models allow it, drop the offending
+    // param and retry once so both old and new models work.
+    if (res.status === 400 && 'temperature' in body) {
+      const detail = await res
+        .clone()
+        .text()
+        .catch(() => '');
+      if (/temperature/i.test(detail)) {
+        delete body.temperature;
+        res = await this.post(body, req.signal);
+      }
     }
 
     if (!res.ok) {
