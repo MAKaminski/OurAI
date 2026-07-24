@@ -8,6 +8,20 @@ type CookieToSet = { name: string; value: string; options?: CookieOptions };
  * current user. No-op when Supabase isn't configured.
  */
 export async function middleware(request: NextRequest) {
+  // Auth-code safety net: a magic-link/OAuth `code` should hit /auth/callback,
+  // but Supabase sends it to the Site URL root when the callback URL isn't
+  // allow-listed. Forward any stray `?code=` to the callback so the session is
+  // still exchanged (the real fix is Supabase's Site URL + redirect allow-list).
+  const { pathname, searchParams } = request.nextUrl;
+  if (searchParams.has('code') && pathname !== '/auth/callback') {
+    const callback = request.nextUrl.clone();
+    callback.pathname = '/auth/callback';
+    if (!callback.searchParams.get('next')) {
+      callback.searchParams.set('next', pathname === '/' ? '/account' : pathname);
+    }
+    return NextResponse.redirect(callback);
+  }
+
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   let response = NextResponse.next({ request });

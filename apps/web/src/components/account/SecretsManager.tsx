@@ -14,6 +14,26 @@ export interface Scope {
   orgId?: string;
 }
 
+/**
+ * Common model-provider keys with a direct link to where each provider shows
+ * the user their API key. Clicking the name prefills the canonical KEY; the ↗
+ * opens that provider's key page for easy access.
+ */
+const PROVIDER_KEYS: { label: string; keyName: string; url: string }[] = [
+  { label: 'DeepSeek', keyName: 'DEEPSEEK_API_KEY', url: 'https://platform.deepseek.com/api_keys' },
+  {
+    label: 'Anthropic (Claude)',
+    keyName: 'ANTHROPIC_API_KEY',
+    url: 'https://console.anthropic.com/settings/keys',
+  },
+  { label: 'OpenAI', keyName: 'OPENAI_API_KEY', url: 'https://platform.openai.com/api-keys' },
+  {
+    label: 'Moonshot (Kimi)',
+    keyName: 'MOONSHOT_API_KEY',
+    url: 'https://platform.moonshot.ai/console/api-keys',
+  },
+];
+
 function scopeQuery(scope: Scope): string {
   const params = new URLSearchParams({ scope: scope.type });
   if (scope.type === 'org' && scope.orgId) params.set('orgId', scope.orgId);
@@ -114,6 +134,31 @@ export function SecretsManager({ scope, hint }: { scope: Scope; hint: string }) 
           Sensitive (encrypted at rest, hidden — e.g. API keys & passwords)
         </label>
       </form>
+
+      <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs text-neutral-500">
+        <span>Get an API key:</span>
+        {PROVIDER_KEYS.map((p) => (
+          <span key={p.keyName} className="inline-flex items-center gap-1">
+            <button
+              type="button"
+              onClick={() => setKey(p.keyName)}
+              title={`Use ${p.keyName}`}
+              className="underline-offset-2 hover:text-neutral-900 hover:underline dark:hover:text-white"
+            >
+              {p.label}
+            </button>
+            <a
+              href={p.url}
+              target="_blank"
+              rel="noreferrer"
+              aria-label={`Open the ${p.label} API keys page`}
+              className="text-neutral-400 transition hover:text-neutral-900 dark:hover:text-white"
+            >
+              ↗
+            </a>
+          </span>
+        ))}
+      </div>
 
       {error && <p className="mt-3 text-xs text-red-600 dark:text-red-400">{error}</p>}
 
