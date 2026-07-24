@@ -13,6 +13,9 @@ export type WorkItemId = Brand<string, 'WorkItemId'>;
 export type SessionId = Brand<string, 'SessionId'>;
 export type EventId = Brand<string, 'EventId'>;
 export type UserId = Brand<string, 'UserId'>;
+export type RequestId = Brand<string, 'RequestId'>;
+export type StageRunId = Brand<string, 'StageRunId'>;
+export type RequestKpiId = Brand<string, 'RequestKpiId'>;
 
 /** Cast a raw string to a branded id. Use at trust boundaries (DB rows, params). */
 export const asId = <B extends string>(value: string): Brand<string, B> =>

@@ -7,6 +7,7 @@ export default async function CompanyHomePage({
 }) {
   const { companyId } = await params;
   const nav = [
+    { href: `/companies/${companyId}/requests`, label: 'Requests' },
     { href: `/companies/${companyId}/ideas`, label: 'Ideas' },
     { href: `/companies/${companyId}/work`, label: 'Outstanding work' },
     { href: `/companies/${companyId}/settings`, label: 'Settings' },

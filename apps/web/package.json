@@ -13,6 +13,7 @@
     "clean": "rm -rf .next .turbo"
   },
   "dependencies": {
+    "@ourai/model-gateway": "workspace:*",
     "@ourai/persistence": "workspace:*",
     "@ourai/shared": "workspace:*",
     "@supabase/ssr": "^0.5.2",

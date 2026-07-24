@@ -67,6 +67,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@ourai/model-gateway':
+        specifier: workspace:*
+        version: link:../../packages/model-gateway
       '@ourai/persistence':
         specifier: workspace:*
         version: link:../../packages/persistence
