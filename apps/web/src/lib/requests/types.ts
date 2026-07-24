@@ -2,6 +2,7 @@ import type {
   RequestStage,
   RequestPriority,
   AgenticStage,
+  ArtifactStage,
   StageRunStatus,
   RequestKpiSource,
   RequestKpiStatus,
@@ -145,5 +146,50 @@ export function toStageRunView(r: StageRunRow): StageRunView {
     createdAt: r.created_at,
     startedAt: r.started_at,
     completedAt: r.completed_at,
+  };
+}
+
+/** A stage artifact as returned to the web app (view of `request_stage_artifacts`). */
+export interface ArtifactView {
+  id: string;
+  requestId: string;
+  stage: ArtifactStage;
+  title: string;
+  content: string | null;
+  source: RequestKpiSource;
+  status: RequestKpiStatus;
+  position: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ArtifactRow {
+  id: string;
+  request_id: string;
+  stage: ArtifactStage;
+  title: string;
+  content: string | null;
+  source: RequestKpiSource;
+  status: RequestKpiStatus;
+  position: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export const ARTIFACT_COLUMNS =
+  'id,request_id,stage,title,content,source,status,position,created_at,updated_at';
+
+export function toArtifactView(r: ArtifactRow): ArtifactView {
+  return {
+    id: r.id,
+    requestId: r.request_id,
+    stage: r.stage,
+    title: r.title,
+    content: r.content,
+    source: r.source,
+    status: r.status,
+    position: r.position,
+    createdAt: r.created_at,
+    updatedAt: r.updated_at,
   };
 }

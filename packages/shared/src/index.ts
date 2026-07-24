@@ -10,6 +10,7 @@ export type {
   RequestId,
   StageRunId,
   RequestKpiId,
+  StageArtifactId,
 } from './types/ids.js';
 export { asId } from './types/ids.js';
 
@@ -29,11 +30,13 @@ export type {
   RequestStage,
   RequestPriority,
   AgenticStage,
+  ArtifactStage,
   StageRun,
   StageRunStatus,
   RequestKpi,
   RequestKpiSource,
   RequestKpiStatus,
+  StageArtifact,
 } from './types/request.js';
 export type {
   Event,
@@ -67,9 +70,14 @@ export {
   createRequestSchema,
   kpiInputSchema,
   kpiAgentOutputSchema,
+  artifactStageSchema,
+  stageArtifactInputSchema,
+  stageAgentOutputSchema,
   type CreateRequestInput,
   type KpiInput,
   type KpiAgentOutput,
+  type StageArtifactInput,
+  type StageAgentOutput,
 } from './schema/request.schema.js';
 
 // State machines

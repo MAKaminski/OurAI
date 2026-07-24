@@ -103,8 +103,16 @@ stateDiagram-v2
     done --> [*]
 ```
 
-Stages 1–2 (**intake → kpi_review**) ship now; **design → build → qa → staging →
-done** are modeled and diagrammed but built later.
+All stages are now **clickable agentic + human-reviewed steps**: KPI proposes
+KPIs; Design a design brief; Build an implementation plan; QA a test plan;
+Staging a release checklist. Each runs server-side via the model gateway, writes a
+`request_stage_runs` row + stage output (`request_kpis` for KPI,
+`request_stage_artifacts` for the rest), and advances on human approval —
+`intake → … → done`. **Executing** Build/QA/Staging against the connected repo
+(worktree-per-agent orchestrator, real deploys) remains the next infra layer
+(ADR 0002). Feature exposure is controlled by the `product-workflow` flag, which
+an admin can toggle in-app at **`/admin`** (a DB override consulted by
+`isFlagEnabled` ahead of PostHog).
 
 ### Stage 1–2 sequence: Add a Request → KPI Assignment (built)
 

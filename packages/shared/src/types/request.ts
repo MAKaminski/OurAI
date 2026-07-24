@@ -1,4 +1,11 @@
-import type { CompanyId, RequestId, StageRunId, RequestKpiId, UserId } from './ids.js';
+import type {
+  CompanyId,
+  RequestId,
+  StageRunId,
+  RequestKpiId,
+  StageArtifactId,
+  UserId,
+} from './ids.js';
 import type { MemberRole } from './company.js';
 
 /**
@@ -38,9 +45,13 @@ export type NewRequest = Omit<Request, 'id' | 'createdAt' | 'updatedAt'>;
 
 /**
  * The agentic stages that run against a request. Each produces a StageRun row
- * (progress + the human-in-the-loop gate). `kpi` ships now; `design` is next.
+ * (progress + the human-in-the-loop gate) and stage output rows: `kpi` writes
+ * `request_kpis`; `design`/`build`/`qa`/`staging` write `request_stage_artifacts`.
  */
-export type AgenticStage = 'kpi' | 'design';
+export type AgenticStage = 'kpi' | 'design' | 'build' | 'qa' | 'staging';
+
+/** The stages whose output lands in the generic `request_stage_artifacts` table. */
+export type ArtifactStage = 'design' | 'build' | 'qa' | 'staging';
 
 /**
  * A single execution of an agentic stage.
@@ -78,6 +89,26 @@ export interface RequestKpi {
   name: string;
   target: string;
   rationale: string | null;
+  source: RequestKpiSource;
+  status: RequestKpiStatus;
+  position: number;
+  createdBy: UserId | null;
+  updatedAt: string;
+  createdAt: string;
+}
+
+/**
+ * The output of an artifact-producing stage (design/build/qa/staging): one row
+ * per proposed/edited item — a design section, a build task, a QA case, a
+ * release-checklist entry. Agent-proposed then human-editable (same HITL gate as
+ * KPIs), keyed by `stage`.
+ */
+export interface StageArtifact {
+  id: StageArtifactId;
+  requestId: RequestId;
+  stage: ArtifactStage;
+  title: string;
+  content: string | null;
   source: RequestKpiSource;
   status: RequestKpiStatus;
   position: number;

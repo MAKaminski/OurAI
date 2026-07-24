@@ -2,18 +2,33 @@
 
 import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
+import type { ArtifactStage, RequestStage } from '@ourai/shared';
 import type { KpiView, RequestView } from '@/lib/requests/types';
+import { StagePanel } from './StagePanel';
 
-const STAGE_LABELS: Record<string, string> = {
-  intake: 'Intake',
-  kpi_review: 'KPI review',
-  design: 'Design',
-  build: 'Build',
-  qa: 'QA',
-  staging: 'Staging',
-  done: 'Done',
-  rejected: 'Rejected',
+const STEPPER: { stage: RequestStage; label: string }[] = [
+  { stage: 'intake', label: 'Intake' },
+  { stage: 'kpi_review', label: 'KPIs' },
+  { stage: 'design', label: 'Design' },
+  { stage: 'build', label: 'Build' },
+  { stage: 'qa', label: 'QA' },
+  { stage: 'staging', label: 'Staging' },
+  { stage: 'done', label: 'Done' },
+];
+
+const STAGE_LABELS: Record<string, string> = Object.fromEntries(
+  STEPPER.map((s) => [s.stage, s.label]),
+);
+
+/** For an artifact stage, the label of the stage it advances to. */
+const NEXT_LABEL: Record<ArtifactStage, string> = {
+  design: 'Build',
+  build: 'QA',
+  qa: 'Staging',
+  staging: 'Done',
 };
+
+const ARTIFACT_STAGES: ArtifactStage[] = ['design', 'build', 'qa', 'staging'];
 
 interface DetailResponse {
   request?: RequestView;
@@ -132,6 +147,8 @@ export function RequestDetail({ companyId, requestId }: { companyId: string; req
 
   const inKpiStage = request.stage === 'intake' || request.stage === 'kpi_review';
   const canApprove = request.stage === 'kpi_review' && kpis.length > 0;
+  const currentIndex = STEPPER.findIndex((s) => s.stage === request.stage);
+  const artifactStage = ARTIFACT_STAGES.find((s) => s === request.stage);
 
   return (
     <div className="space-y-8">
@@ -155,10 +172,35 @@ export function RequestDetail({ companyId, requestId }: { companyId: string; req
         ) : null}
       </div>
 
-      <section className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-sm font-semibold">Product KPIs</h2>
-          {inKpiStage ? (
+      {/* Stage stepper */}
+      <ol className="flex flex-wrap items-center gap-1 text-xs">
+        {STEPPER.map((s, i) => {
+          const done = i < currentIndex;
+          const current = i === currentIndex;
+          return (
+            <li key={s.stage} className="flex items-center gap-1">
+              <span
+                className={
+                  current
+                    ? 'rounded-full bg-neutral-900 px-2 py-0.5 font-medium text-white dark:bg-white dark:text-neutral-900'
+                    : done
+                      ? 'rounded-full bg-emerald-100 px-2 py-0.5 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300'
+                      : 'rounded-full bg-neutral-100 px-2 py-0.5 text-neutral-400 dark:bg-neutral-800'
+                }
+              >
+                {s.label}
+              </span>
+              {i < STEPPER.length - 1 ? <span className="text-neutral-300">→</span> : null}
+            </li>
+          );
+        })}
+      </ol>
+
+      {/* KPI stage (intake / kpi_review) */}
+      {inKpiStage ? (
+        <section className="space-y-4">
+          <div className="flex items-center justify-between">
+            <h2 className="text-sm font-semibold">Product KPIs</h2>
             <button
               onClick={generate}
               disabled={generating}
@@ -166,82 +208,103 @@ export function RequestDetail({ companyId, requestId }: { companyId: string; req
             >
               {generating ? 'Generating…' : kpis.length ? 'Regenerate KPIs' : 'Generate KPIs'}
             </button>
-          ) : null}
-        </div>
+          </div>
 
-        {kpis.length === 0 ? (
-          <p className="text-sm text-neutral-400">
-            No KPIs yet. Generate a proposal, then review and edit before approving.
-          </p>
-        ) : (
-          <ul className="space-y-3">
-            {kpis.map((k) => (
-              <li
-                key={k.id}
-                className="space-y-2 rounded-lg border border-neutral-200 p-3 dark:border-neutral-800"
-              >
-                <div className="flex items-center gap-2">
+          {kpis.length === 0 ? (
+            <p className="text-sm text-neutral-400">
+              No KPIs yet. Generate a proposal, then review and edit before approving.
+            </p>
+          ) : (
+            <ul className="space-y-3">
+              {kpis.map((k) => (
+                <li
+                  key={k.id}
+                  className="space-y-2 rounded-lg border border-neutral-200 p-3 dark:border-neutral-800"
+                >
+                  <div className="flex items-center gap-2">
+                    <input
+                      value={k.name}
+                      onChange={(e) => patchLocal(k.id, 'name', e.target.value)}
+                      className="flex-1 rounded-md border border-neutral-300 px-2 py-1 text-sm font-medium dark:border-neutral-700 dark:bg-neutral-900"
+                    />
+                    <span className="rounded bg-neutral-100 px-1.5 py-0.5 text-[10px] uppercase text-neutral-500 dark:bg-neutral-800">
+                      {k.source}
+                    </span>
+                  </div>
                   <input
-                    value={k.name}
-                    onChange={(e) => patchLocal(k.id, 'name', e.target.value)}
-                    className="flex-1 rounded-md border border-neutral-300 px-2 py-1 text-sm font-medium dark:border-neutral-700 dark:bg-neutral-900"
+                    value={k.target}
+                    onChange={(e) => patchLocal(k.id, 'target', e.target.value)}
+                    placeholder="Target"
+                    className="w-full rounded-md border border-neutral-300 px-2 py-1 text-sm dark:border-neutral-700 dark:bg-neutral-900"
                   />
-                  <span className="rounded bg-neutral-100 px-1.5 py-0.5 text-[10px] uppercase text-neutral-500 dark:bg-neutral-800">
-                    {k.source}
-                  </span>
-                </div>
-                <input
-                  value={k.target}
-                  onChange={(e) => patchLocal(k.id, 'target', e.target.value)}
-                  placeholder="Target"
-                  className="w-full rounded-md border border-neutral-300 px-2 py-1 text-sm dark:border-neutral-700 dark:bg-neutral-900"
-                />
-                <textarea
-                  value={k.rationale ?? ''}
-                  onChange={(e) => patchLocal(k.id, 'rationale', e.target.value)}
-                  placeholder="Rationale"
-                  rows={2}
-                  className="w-full rounded-md border border-neutral-300 px-2 py-1 text-sm dark:border-neutral-700 dark:bg-neutral-900"
-                />
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => saveKpi(k)}
-                    className="rounded-md bg-neutral-900 px-3 py-1 text-xs font-medium text-white dark:bg-white dark:text-neutral-900"
-                  >
-                    Save
-                  </button>
-                  <button
-                    onClick={() => removeKpi(k.id)}
-                    className="rounded-md border border-neutral-300 px-3 py-1 text-xs dark:border-neutral-700"
-                  >
-                    Delete
-                  </button>
-                </div>
-              </li>
-            ))}
-          </ul>
-        )}
+                  <textarea
+                    value={k.rationale ?? ''}
+                    onChange={(e) => patchLocal(k.id, 'rationale', e.target.value)}
+                    placeholder="Rationale"
+                    rows={2}
+                    className="w-full rounded-md border border-neutral-300 px-2 py-1 text-sm dark:border-neutral-700 dark:bg-neutral-900"
+                  />
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => saveKpi(k)}
+                      className="rounded-md bg-neutral-900 px-3 py-1 text-xs font-medium text-white dark:bg-white dark:text-neutral-900"
+                    >
+                      Save
+                    </button>
+                    <button
+                      onClick={() => removeKpi(k.id)}
+                      className="rounded-md border border-neutral-300 px-3 py-1 text-xs dark:border-neutral-700"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
 
-        {inKpiStage ? (
           <button onClick={addKpi} className="text-sm text-neutral-500 underline">
             + Add a KPI manually
           </button>
-        ) : null}
 
-        {error ? <p className="text-sm text-red-600 dark:text-red-400">{error}</p> : null}
+          {error ? <p className="text-sm text-red-600 dark:text-red-400">{error}</p> : null}
 
-        {canApprove ? (
-          <div className="border-t border-neutral-200 pt-4 dark:border-neutral-800">
-            <button
-              onClick={approve}
-              disabled={approving}
-              className="rounded-md bg-emerald-600 px-4 py-2 text-sm font-medium text-white disabled:opacity-60"
-            >
-              {approving ? 'Approving…' : 'Approve KPIs → continue to Design'}
-            </button>
-          </div>
-        ) : null}
-      </section>
+          {canApprove ? (
+            <div className="border-t border-neutral-200 pt-4 dark:border-neutral-800">
+              <button
+                onClick={approve}
+                disabled={approving}
+                className="rounded-md bg-emerald-600 px-4 py-2 text-sm font-medium text-white disabled:opacity-60"
+              >
+                {approving ? 'Approving…' : 'Approve KPIs → continue to Design'}
+              </button>
+            </div>
+          ) : null}
+        </section>
+      ) : null}
+
+      {/* Artifact stages (design / build / qa / staging) */}
+      {artifactStage ? (
+        <StagePanel
+          companyId={companyId}
+          requestId={requestId}
+          stage={artifactStage}
+          nextLabel={NEXT_LABEL[artifactStage]}
+          onAdvanced={load}
+        />
+      ) : null}
+
+      {/* Terminal states */}
+      {request.stage === 'done' ? (
+        <p className="rounded-lg bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300">
+          🎉 Shipped — this request has moved through the full pipeline.
+        </p>
+      ) : null}
+      {request.stage === 'rejected' ? (
+        <p className="rounded-lg bg-neutral-100 px-4 py-3 text-sm text-neutral-500 dark:bg-neutral-800">
+          This request was rejected.
+        </p>
+      ) : null}
     </div>
   );
 }

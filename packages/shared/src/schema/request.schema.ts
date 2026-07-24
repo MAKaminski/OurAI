@@ -43,3 +43,21 @@ export const kpiAgentOutputSchema = z.object({
 });
 
 export type KpiAgentOutput = z.infer<typeof kpiAgentOutputSchema>;
+
+/** The artifact-producing pipeline stages (design/build/qa/staging). */
+export const artifactStageSchema = z.enum(['design', 'build', 'qa', 'staging']);
+
+/** A single stage artifact as proposed by the agent or entered/edited by a human. */
+export const stageArtifactInputSchema = z.object({
+  title: z.string().min(1).max(200),
+  content: z.string().max(20_000).nullable().default(null),
+});
+
+export type StageArtifactInput = z.infer<typeof stageArtifactInputSchema>;
+
+/** The strict JSON shape every artifact-stage agent must return. */
+export const stageAgentOutputSchema = z.object({
+  items: z.array(stageArtifactInputSchema).min(1).max(12),
+});
+
+export type StageAgentOutput = z.infer<typeof stageAgentOutputSchema>;

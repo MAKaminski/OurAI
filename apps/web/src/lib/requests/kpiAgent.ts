@@ -7,66 +7,9 @@ import {
   type TokenUsage,
 } from '@ourai/model-gateway';
 import { kpiAgentOutputSchema, type KpiInput } from '@ourai/shared';
-import { decryptSecret } from '@/lib/crypto/secrets';
+import { resolveCredential, stripFence } from './modelCredential';
 
-/**
- * The chat/completions providers whose `chat()` is implemented today, in
- * preference order. Anthropic is intentionally excluded — its native provider
- * is still a stub (Phase 1b). Each maps a vault secret key → gateway provider.
- */
-const PROVIDER_KEYS: ReadonlyArray<{ provider: ModelProviderName; secretKey: string }> = [
-  { provider: 'deepseek', secretKey: 'DEEPSEEK_API_KEY' },
-  { provider: 'kimi', secretKey: 'MOONSHOT_API_KEY' },
-];
-
-export class ModelKeyMissingError extends Error {
-  constructor() {
-    super(
-      'No model API key configured. Add a DeepSeek or Kimi key on the Connections ' +
-        'page (/connections) to generate KPIs.',
-    );
-    this.name = 'ModelKeyMissingError';
-  }
-}
-
-interface SecretRow {
-  key: string;
-  encrypted_value: string | null;
-  value: string | null;
-}
-
-/**
- * Resolve a usable model credential for the caller. Prefers the caller's
- * user-scoped vault key (RLS-scoped `secrets`), falling back to a deployment
- * env var for local/dev. Throws `ModelKeyMissingError` when nothing is found.
- */
-async function resolveCredential(
-  supabase: SupabaseClient,
-  userId: string,
-): Promise<{ provider: ModelProviderName; apiKey: string }> {
-  const { data, error } = await supabase
-    .from('secrets')
-    .select('key,encrypted_value,value')
-    .eq('scope', 'user')
-    .eq('user_id', userId)
-    .in(
-      'key',
-      PROVIDER_KEYS.map((p) => p.secretKey),
-    );
-  if (error) throw new Error(`resolve model key failed: ${error.message}`);
-
-  const rows = (data ?? []) as SecretRow[];
-  for (const { provider, secretKey } of PROVIDER_KEYS) {
-    const row = rows.find((r) => r.key === secretKey);
-    if (row) {
-      const apiKey = row.encrypted_value ? decryptSecret(row.encrypted_value) : (row.value ?? '');
-      if (apiKey) return { provider, apiKey };
-    }
-    const envKey = process.env[secretKey];
-    if (envKey) return { provider, apiKey: envKey };
-  }
-  throw new ModelKeyMissingError();
-}
+export { ModelKeyMissingError } from './modelCredential';
 
 const SYSTEM_PROMPT =
   'You are a senior product manager. Given a product request, propose 3–6 ' +
@@ -78,16 +21,6 @@ const SYSTEM_PROMPT =
 
 function userPrompt(title: string, body: string | null): string {
   return `Request title: ${title}\n\nRequest details:\n${body?.trim() || '(none provided)'}`;
-}
-
-/** Strip an accidental ```json fence so JSON.parse succeeds. */
-function stripFence(text: string): string {
-  const trimmed = text.trim();
-  if (!trimmed.startsWith('```')) return trimmed;
-  return trimmed
-    .replace(/^```(?:json)?\s*/i, '')
-    .replace(/\s*```$/, '')
-    .trim();
 }
 
 export interface KpiAgentResult {
