@@ -23,6 +23,7 @@ export function AccountManager({ email, initialOrgs }: { email: string; initialO
   const chatEnabled = useFlag('chat');
   const contextEnabled = useFlag('contextManager');
   const examplesEnabled = useFlag('examples');
+  const connectorsEnabled = useFlag('connectors');
 
   async function createOrg(e: React.FormEvent) {
     e.preventDefault();
@@ -63,6 +64,14 @@ export function AccountManager({ email, initialOrgs }: { email: string; initialO
           <p className="text-sm text-neutral-500">{email}</p>
         </div>
         <div className="flex items-center gap-2">
+          {connectorsEnabled && (
+            <a
+              href="/connections"
+              className="rounded-lg border border-neutral-300 px-3 py-1.5 text-sm dark:border-neutral-700"
+            >
+              Connections
+            </a>
+          )}
           {examplesEnabled && (
             <a
               href="/learn"

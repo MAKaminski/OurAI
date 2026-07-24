@@ -43,6 +43,11 @@ export const FLAGS = {
     defaultValue: true,
     description: 'Post-login multi-format example guides (/learn): video, pictures, and wiki.',
   },
+  connectors: {
+    key: 'connectors',
+    defaultValue: true,
+    description: 'Connections surface (/connections): agnostic key/token connectors for services.',
+  },
 } as const satisfies Record<string, FlagDefinition>;
 
 export type FlagName = keyof typeof FLAGS;
