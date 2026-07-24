@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from 'react';
 import type { ArtifactStage, RequestStage } from '@ourai/shared';
 import type { KpiView, RequestView } from '@/lib/requests/types';
 import { StagePanel } from './StagePanel';
+import { BuildPanel } from './BuildPanel';
 
 const STEPPER: { stage: RequestStage; label: string }[] = [
   { stage: 'intake', label: 'Intake' },
@@ -161,9 +162,21 @@ export function RequestDetail({ companyId, requestId }: { companyId: string; req
         </Link>
         <div className="mt-2 flex items-center justify-between gap-4">
           <h1 className="text-2xl font-semibold">{request.title}</h1>
-          <span className="rounded-full bg-neutral-100 px-2 py-0.5 text-xs text-neutral-600 dark:bg-neutral-800 dark:text-neutral-300">
-            {STAGE_LABELS[request.stage] ?? request.stage}
-          </span>
+          <div className="flex shrink-0 items-center gap-2">
+            {request.prUrl ? (
+              <a
+                href={request.prUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-700 underline dark:bg-emerald-900/40 dark:text-emerald-300"
+              >
+                Draft PR ↗
+              </a>
+            ) : null}
+            <span className="rounded-full bg-neutral-100 px-2 py-0.5 text-xs text-neutral-600 dark:bg-neutral-800 dark:text-neutral-300">
+              {STAGE_LABELS[request.stage] ?? request.stage}
+            </span>
+          </div>
         </div>
         {request.body ? (
           <p className="mt-2 whitespace-pre-wrap text-sm text-neutral-600 dark:text-neutral-400">
@@ -294,11 +307,33 @@ export function RequestDetail({ companyId, requestId }: { companyId: string; req
         />
       ) : null}
 
+      {/* Build execution: generate code + open a draft PR (build stage only). */}
+      {request.stage === 'build' ? (
+        <BuildPanel
+          companyId={companyId}
+          requestId={requestId}
+          existingPrUrl={request.prUrl}
+          onBuilt={load}
+        />
+      ) : null}
+
       {/* Terminal states */}
       {request.stage === 'done' ? (
-        <p className="rounded-lg bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300">
-          🎉 Shipped — this request has moved through the full pipeline.
-        </p>
+        <div className="space-y-2 rounded-lg bg-emerald-50 px-4 py-3 dark:bg-emerald-900/30">
+          <p className="text-sm font-medium text-emerald-700 dark:text-emerald-300">
+            🎉 Shipped — this request has moved through the full pipeline.
+          </p>
+          {request.prUrl ? (
+            <a
+              href={request.prUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="text-sm text-emerald-700 underline dark:text-emerald-300"
+            >
+              View the build PR ↗
+            </a>
+          ) : null}
+        </div>
       ) : null}
       {request.stage === 'rejected' ? (
         <p className="rounded-lg bg-neutral-100 px-4 py-3 text-sm text-neutral-500 dark:bg-neutral-800">

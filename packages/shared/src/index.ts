@@ -73,11 +73,15 @@ export {
   artifactStageSchema,
   stageArtifactInputSchema,
   stageAgentOutputSchema,
+  buildFileSchema,
+  buildAgentOutputSchema,
   type CreateRequestInput,
   type KpiInput,
   type KpiAgentOutput,
   type StageArtifactInput,
   type StageAgentOutput,
+  type BuildFile,
+  type BuildAgentOutput,
 } from './schema/request.schema.js';
 
 // State machines

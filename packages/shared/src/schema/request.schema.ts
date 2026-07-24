@@ -61,3 +61,26 @@ export const stageAgentOutputSchema = z.object({
 });
 
 export type StageAgentOutput = z.infer<typeof stageAgentOutputSchema>;
+
+/** A single generated file in a build (full contents, repo-relative path). */
+export const buildFileSchema = z.object({
+  path: z
+    .string()
+    .min(1)
+    .max(400)
+    // Repo-relative only: no leading slash, no parent traversal.
+    .refine((p) => !p.startsWith('/') && !p.split('/').includes('..'), {
+      message: 'path must be repo-relative (no leading slash or "..")',
+    }),
+  content: z.string().max(100_000),
+});
+
+export type BuildFile = z.infer<typeof buildFileSchema>;
+
+/** The strict JSON shape the Build agent must return. */
+export const buildAgentOutputSchema = z.object({
+  summary: z.string().min(1).max(2_000),
+  files: z.array(buildFileSchema).min(1).max(20),
+});
+
+export type BuildAgentOutput = z.infer<typeof buildAgentOutputSchema>;

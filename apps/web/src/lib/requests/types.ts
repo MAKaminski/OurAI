@@ -18,6 +18,10 @@ export interface RequestView {
   priority: RequestPriority;
   actingRole: string | null;
   submittedBy: string | null;
+  /** Draft PR opened by the Build stage (null until built). */
+  prUrl: string | null;
+  prNumber: number | null;
+  buildBranch: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -31,12 +35,16 @@ export interface RequestRow {
   priority: RequestPriority;
   acting_role: string | null;
   submitted_by: string | null;
+  pr_url: string | null;
+  pr_number: number | null;
+  build_branch: string | null;
+  build_head_sha: string | null;
   created_at: string;
   updated_at: string;
 }
 
 export const REQUEST_COLUMNS =
-  'id,company_id,title,body,stage,priority,acting_role,submitted_by,created_at,updated_at';
+  'id,company_id,title,body,stage,priority,acting_role,submitted_by,pr_url,pr_number,build_branch,build_head_sha,created_at,updated_at';
 
 export function toRequestView(r: RequestRow): RequestView {
   return {
@@ -48,6 +56,9 @@ export function toRequestView(r: RequestRow): RequestView {
     priority: r.priority,
     actingRole: r.acting_role,
     submittedBy: r.submitted_by,
+    prUrl: r.pr_url,
+    prNumber: r.pr_number,
+    buildBranch: r.build_branch,
     createdAt: r.created_at,
     updatedAt: r.updated_at,
   };

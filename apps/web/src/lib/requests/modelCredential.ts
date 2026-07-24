@@ -138,6 +138,40 @@ export async function withModelFallback<T>(
   throw lastErr instanceof Error ? lastErr : new Error(String(lastErr));
 }
 
+export class GithubTokenMissingError extends Error {
+  constructor() {
+    super(
+      'No GitHub token configured. Add a GitHub personal access token (with repo ' +
+        'access) on the Connections page (/connections) to open a build PR.',
+    );
+    this.name = 'GithubTokenMissingError';
+  }
+}
+
+/**
+ * The caller's GitHub PAT from the vault (user-scoped `secrets`, key
+ * `GITHUB_TOKEN`), decrypted; env fallback for local/dev. Throws
+ * `GithubTokenMissingError` when absent.
+ */
+export async function resolveGithubToken(
+  supabase: SupabaseClient,
+  userId: string,
+): Promise<string> {
+  const { data, error } = await supabase
+    .from('secrets')
+    .select('key,encrypted_value,value')
+    .eq('scope', 'user')
+    .eq('user_id', userId)
+    .eq('key', 'GITHUB_TOKEN')
+    .maybeSingle();
+  if (error) throw new Error(`resolve github token failed: ${error.message}`);
+  const row = data as SecretRow | null;
+  const fromVault = row?.encrypted_value ? decryptSecret(row.encrypted_value) : (row?.value ?? '');
+  const token = fromVault || process.env.GITHUB_TOKEN || '';
+  if (!token) throw new GithubTokenMissingError();
+  return token;
+}
+
 /** Strip an accidental ```json fence so JSON.parse succeeds on model output. */
 export function stripFence(text: string): string {
   const trimmed = text.trim();
