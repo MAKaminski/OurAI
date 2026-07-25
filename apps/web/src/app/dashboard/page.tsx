@@ -66,6 +66,9 @@ export default async function DashboardPage() {
           <Link href="/connections" className="underline">
             Connections
           </Link>
+          <Link href="/billing" className="underline">
+            Billing
+          </Link>
           <Link href="/account" className="underline">
             Account
           </Link>

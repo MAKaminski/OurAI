@@ -32,6 +32,9 @@ export default async function AccountPage() {
         <Link href="/companies" className="underline">
           Your companies →
         </Link>
+        <Link href="/billing" className="underline">
+          Billing
+        </Link>
         {isAdmin(user) ? (
           <Link href="/admin" className="text-amber-600 underline dark:text-amber-400">
             Admin

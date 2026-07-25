@@ -47,6 +47,12 @@ export function SiteNav() {
           <Link href="/integrations" className="transition hover:text-zinc-50">
             Integrations
           </Link>
+          <Link href="/pricing" className="transition hover:text-zinc-50">
+            Pricing
+          </Link>
+          <Link href="/docs" className="transition hover:text-zinc-50">
+            Docs
+          </Link>
           <Link href="/compare" className="transition hover:text-zinc-50">
             Compare
           </Link>

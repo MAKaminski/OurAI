@@ -20,6 +20,9 @@ export default async function AdminPage() {
           <Link href="/companies" className="underline">
             Companies
           </Link>
+          <Link href="/admin/support" className="underline">
+            Support
+          </Link>
           <Link href="/account" className="underline">
             Account
           </Link>
