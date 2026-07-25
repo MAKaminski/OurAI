@@ -6,6 +6,12 @@ import { Reveal } from '@/components/motion/Reveal';
 import { Stagger, StaggerItem } from '@/components/motion/Stagger';
 import { MagneticButton } from '@/components/motion/MagneticButton';
 import { site } from '@/lib/site';
+import {
+  CONNECTORS,
+  CATEGORY_LABELS,
+  type Connector,
+  type ConnectorCategory,
+} from '@/lib/connectors/registry';
 
 export const metadata: Metadata = {
   title: 'Integrations — model providers & services',
@@ -27,105 +33,16 @@ export const metadata: Metadata = {
   alternates: { canonical: '/integrations' },
 };
 
-interface Integration {
-  name: string;
-  slug: string;
-  href: string;
-  tag: string;
-  why: string;
-}
+/** Fixed category render order, driven by the connectors registry. */
+const CATEGORY_ORDER: ConnectorCategory[] = ['model', 'source', 'infra', 'analytics'];
 
-const GROUPS: { group: string; blurb: string; items: Integration[] }[] = [
-  {
-    group: 'Model providers — bring your own key',
-    blurb:
-      'Point OurAI at the model you already pay for. Keys are encrypted and scoped per org and per person, so you keep your negotiated rates and never get locked in.',
-    items: [
-      {
-        name: 'DeepSeek',
-        slug: 'deepseek',
-        href: 'https://www.deepseek.com/en/',
-        tag: 'Default model',
-        why: 'Best cost-to-quality for agentic coding — the default, and cheap to run at team scale.',
-      },
-      {
-        name: 'Anthropic Claude',
-        slug: 'anthropic',
-        href: 'https://www.anthropic.com',
-        tag: 'Reasoning',
-        why: 'Swap to Claude for deep reasoning and long-context refactors — one env var to switch.',
-      },
-      {
-        name: 'Moonshot Kimi',
-        slug: 'kimi',
-        href: 'https://www.moonshot.ai',
-        tag: 'Long context',
-        why: 'Long-context, cost-efficient runs for large codebases and sprawling specs.',
-      },
-      {
-        name: 'OpenAI',
-        slug: 'openai',
-        href: 'https://openai.com',
-        tag: 'Optional',
-        why: 'GPT models through the same gateway — mix providers per team or per task.',
-      },
-    ],
-  },
-  {
-    group: 'Data & authentication',
-    blurb:
-      'Your data lives in Postgres you control, isolated per organization by row-level security.',
-    items: [
-      {
-        name: 'Supabase',
-        slug: 'supabase',
-        href: 'https://supabase.com',
-        tag: 'Postgres + Auth',
-        why: 'Magic-link auth, row-level security, and Realtime — org and personal data never cross.',
-      },
-    ],
-  },
-  {
-    group: 'Analytics & experimentation',
-    blurb: 'Instrument every step so you can prove value to the people who sign the check.',
-    items: [
-      {
-        name: 'PostHog',
-        slug: 'posthog',
-        href: 'https://posthog.com',
-        tag: 'Product analytics',
-        why: 'Funnels, feature flags, and session replay — measure adoption and ROI, not vibes.',
-      },
-    ],
-  },
-  {
-    group: 'Delivery, hosting & CI/CD',
-    blurb: 'Agents work where your code and pipelines already live.',
-    items: [
-      {
-        name: 'GitHub',
-        slug: 'github',
-        href: 'https://github.com',
-        tag: 'Source + CI',
-        why: 'Branch-per-agent, pull requests, and checks — nothing merges without a human.',
-      },
-      {
-        name: 'Vercel',
-        slug: 'vercel',
-        href: 'https://vercel.com',
-        tag: 'Hosting',
-        why: 'Edge hosting with a preview deploy on every pull request.',
-      },
-      {
-        name: 'Resend',
-        slug: 'resend',
-        href: 'https://resend.com',
-        tag: 'Email',
-        why: 'Transactional email for invites and support — no address is ever exposed to users.',
-      },
-    ],
-  },
-];
+/** Group connectors by category into ordered sections. */
+function groupedConnectors(): { category: ConnectorCategory; items: Connector[] }[] {
+  return CATEGORY_ORDER.map((category) => ({
+    category,
+    items: CONNECTORS.filter((c) => c.category === category),
+  })).filter((section) => section.items.length > 0);
+}
 
 const PERSONAS = [
   {
@@ -178,6 +95,7 @@ function FaqJsonLd() {
 }
 
 export default function IntegrationsPage() {
+  const sections = groupedConnectors();
   return (
     <>
       <FaqJsonLd />
@@ -212,33 +130,37 @@ export default function IntegrationsPage() {
           ))}
         </Stagger>
 
-        {/* Integration groups */}
+        {/* Integration groups — generated from the connectors registry */}
         <div className="mt-16 space-y-12">
-          {GROUPS.map((section) => (
-            <section key={section.group}>
+          {sections.map((section) => (
+            <section key={section.category}>
               <h2 className="text-xl font-semibold tracking-[-0.01em] text-zinc-100">
-                {section.group}
+                {CATEGORY_LABELS[section.category]}
               </h2>
-              <p className="mt-2 max-w-2xl text-sm text-zinc-400">{section.blurb}</p>
               <Stagger className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {section.items.map((it) => (
-                  <StaggerItem key={it.name} className="h-full">
-                    <a
-                      href={it.href}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="group flex h-full flex-col rounded-xl border border-white/10 bg-[#0e0e10] p-5 text-zinc-100 transition hover:border-white/25"
-                      aria-label={`${it.name} — visit website`}
-                    >
+                {section.items.map((c) => (
+                  <StaggerItem key={c.id} className="h-full">
+                    <div className="flex h-full flex-col rounded-xl border border-white/10 bg-[#0e0e10] p-5 text-zinc-100">
                       <div className="flex items-center justify-between">
-                        <TechLogo slug={it.slug} size={32} />
-                        <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-zinc-500">
-                          {it.tag}
-                        </span>
+                        <TechLogo slug={c.slug} size={32} />
+                        {c.oauthComingSoon ? (
+                          <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-zinc-500">
+                            OAuth soon
+                          </span>
+                        ) : null}
                       </div>
-                      <span className="mt-4 font-semibold group-hover:underline">{it.name}</span>
-                      <span className="mt-1 text-sm leading-relaxed text-zinc-400">{it.why}</span>
-                    </a>
+                      <span className="mt-4 font-semibold">{c.name}</span>
+                      <span className="mt-1 text-sm leading-relaxed text-zinc-400">{c.blurb}</span>
+                      <a
+                        href={c.getKeyUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="mt-4 inline-flex w-fit items-center gap-1 text-sm font-medium text-blue-400 underline-offset-4 transition hover:text-blue-300 hover:underline"
+                        aria-label={`Get your ${c.name} key`}
+                      >
+                        Get your key ↗
+                      </a>
+                    </div>
                   </StaggerItem>
                 ))}
               </Stagger>

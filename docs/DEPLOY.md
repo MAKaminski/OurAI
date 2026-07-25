@@ -41,6 +41,11 @@ supabase db push        # applies migrations/*.sql
 Nothing here targets `public`; a diff of the project's `public` schema before
 and after should be identical.
 
+> **If a table 404s with "Could not find the table 'ourai.…' in the schema
+> cache" (PGRST205)** after applying migrations, PostgREST is serving a stale
+> schema cache. Reload it by running `notify pgrst, 'reload schema';` in the SQL
+> editor (migration `0008` also issues this automatically).
+
 ## 4. Environment variables (Vercel)
 
 From `infra/env/web.env.example`:

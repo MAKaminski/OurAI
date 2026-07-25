@@ -7,7 +7,9 @@ export const dynamic = 'force-dynamic';
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get('code');
-  const next = searchParams.get('next') ?? '/account';
+  // Land signed-in users on their home (the blueprint's value-first fix), not the
+  // keys page. An explicit ?next= still wins.
+  const next = searchParams.get('next') ?? '/dashboard';
 
   if (code) {
     const supabase = await getSupabaseServerClient();

@@ -10,9 +10,11 @@
     "start": "next start",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "lint": "eslint .",
+    "test": "vitest run",
     "clean": "rm -rf .next .turbo"
   },
   "dependencies": {
+    "@ourai/model-gateway": "workspace:*",
     "@ourai/persistence": "workspace:*",
     "@ourai/shared": "workspace:*",
     "@supabase/ssr": "^0.5.2",
@@ -34,6 +36,7 @@
     "eslint": "^9.13.0",
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.14",
-    "typescript": "^5.6.3"
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.8"
   }
 }

@@ -1,5 +1,6 @@
 import { analyticsEnabled, posthogConfig } from '@/lib/analytics/config';
 import { FLAGS, type FlagName } from './registry';
+import { getFlagOverride } from './overrides';
 
 /**
  * Server-side flag evaluation for gating routes / pages / API handlers.
@@ -15,6 +16,13 @@ export async function isFlagEnabled(
   distinctId: string | null | undefined,
 ): Promise<boolean> {
   const def = FLAGS[name];
+
+  // Admin-controlled DB override wins over PostHog and the registry default, so
+  // the in-app /admin panel is the single lever operators reach for. A missing
+  // override (null) falls through to the normal PostHog → default resolution.
+  const override = await getFlagOverride(def.key);
+  if (typeof override === 'boolean') return override;
+
   if (!analyticsEnabled || !distinctId) return def.defaultValue;
   try {
     const res = await fetch(`${posthogConfig.host}/flags?v=2`, {

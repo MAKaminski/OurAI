@@ -11,6 +11,9 @@ export const COST_TABLE: Record<string, ModelCost> = {
   'deepseek-chat-v3.1': { inputPerMillion: 0.25, outputPerMillion: 0.95 },
   'moonshotai/kimi-k2.6': { inputPerMillion: 0.95, outputPerMillion: 4.0 },
   'moonshotai/kimi-k2.5': { inputPerMillion: 0.6, outputPerMillion: 3.0 },
+  'claude-opus-5': { inputPerMillion: 5.0, outputPerMillion: 25.0 },
+  'claude-sonnet-5': { inputPerMillion: 3.0, outputPerMillion: 15.0 },
+  'claude-haiku-4-5-20251001': { inputPerMillion: 1.0, outputPerMillion: 5.0 },
 };
 
 export function computeCostUsd(modelId: string, usage: TokenUsage): number {
