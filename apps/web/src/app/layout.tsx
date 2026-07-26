@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
+import { Analytics } from '@vercel/analytics/next';
 import { PostHogProvider } from '@/lib/analytics/PostHogProvider';
 import { MotionProvider } from '@/components/motion/MotionProvider';
 import { site } from '@/lib/site';
@@ -95,6 +96,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <PostHogProvider>
           <MotionProvider>{children}</MotionProvider>
         </PostHogProvider>
+        <Analytics />
       </body>
     </html>
   );
