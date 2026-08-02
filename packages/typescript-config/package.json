@@ -5,6 +5,7 @@
   "license": "Apache-2.0",
   "files": [
     "base.json",
+    "common.json",
     "nextjs.json",
     "node-library.json"
   ]
