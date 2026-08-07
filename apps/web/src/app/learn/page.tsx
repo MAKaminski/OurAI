@@ -6,6 +6,7 @@ import { Footer } from '@/components/landing/Footer';
 import { Breadcrumbs } from '@/components/landing/Breadcrumbs';
 import { Reveal } from '@/components/motion/Reveal';
 import { Stagger, StaggerItem } from '@/components/motion/Stagger';
+import { ScreenshotGallery, type Screenshot } from '@/components/learn/ScreenshotGallery';
 import { getCurrentUser } from '@/lib/auth';
 import { isFlagEnabled } from '@/lib/flags/server';
 
@@ -31,6 +32,23 @@ const GUIDES = [
     kicker: 'Marketing coordination · in development',
     title: 'Coordinate a launch, coupled to the build',
     body: 'See how marketing plans a launch in the same room, timed to the feature it depends on.',
+  },
+];
+
+const SCREENS: Screenshot[] = [
+  {
+    src: '/screenshots/app-connections.png',
+    alt: 'The signed-in Connections page listing model, source, infrastructure and analytics providers, with DeepSeek and GitHub connected.',
+    label: 'app.ourai.dev/connections',
+    caption:
+      'Connections — bring your own keys. Model providers, GitHub, Vercel, Supabase and PostHog connect from one screen; here DeepSeek and GitHub are live for this workspace.',
+  },
+  {
+    src: '/screenshots/app-settings.png',
+    alt: 'The signed-in Settings & keys page showing the personal scope, an add-key form, and stored DeepSeek and GitHub secrets.',
+    label: 'app.ourai.dev/account',
+    caption:
+      'Settings & keys — the same encrypted vault, scoped Personal or per-org. Every credential is stored server-side and shown masked; the GitHub token here powers branch-per-agent and pull requests.',
   },
 ];
 
@@ -85,6 +103,24 @@ export default async function LearnPage() {
             </StaggerItem>
           ))}
         </Stagger>
+
+        <section className="mt-24">
+          <Reveal>
+            <span className="font-mono text-xs uppercase tracking-[0.15em] text-zinc-500">
+              Inside OurAI
+            </span>
+            <h2 className="mt-4 max-w-3xl text-balance text-3xl font-semibold tracking-[-0.02em] text-zinc-50">
+              Real screens from a signed-in workspace.
+            </h2>
+            <p className="mt-4 max-w-2xl text-zinc-400">
+              Not mockups — these are captured straight from the app. Connect the services your team
+              already uses, then manage every credential from one encrypted vault.
+            </p>
+          </Reveal>
+          <div className="mt-10">
+            <ScreenshotGallery shots={SCREENS} />
+          </div>
+        </section>
       </main>
       <Footer />
     </>

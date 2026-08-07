@@ -1,4 +1,5 @@
 import { SettingsManager } from '@/components/settings/SettingsManager';
+import { ModelOrderConfig } from '@/components/settings/ModelOrderConfig';
 
 export const metadata = {
   title: 'Settings',
@@ -16,6 +17,16 @@ export default async function SettingsPage({ params }: { params: Promise<{ compa
       <div className="mt-8">
         <SettingsManager companyId={companyId} />
       </div>
+
+      <section className="mt-12">
+        <h2 className="text-lg font-semibold">Model provider order</h2>
+        <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
+          Rank which model the pipeline agents use first, and what they fall back to.
+        </p>
+        <div className="mt-4">
+          <ModelOrderConfig companyId={companyId} />
+        </div>
+      </section>
     </main>
   );
 }

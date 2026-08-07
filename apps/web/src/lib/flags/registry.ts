@@ -43,6 +43,17 @@ export const FLAGS = {
     defaultValue: true,
     description: 'Post-login multi-format example guides (/learn): video, pictures, and wiki.',
   },
+  connectors: {
+    key: 'connectors',
+    defaultValue: true,
+    description: 'Connections surface (/connections): agnostic key/token connectors for services.',
+  },
+  productWorkflow: {
+    key: 'product-workflow',
+    defaultValue: false,
+    description:
+      'Product workflow pipeline: Add a Request → agentic Product KPI Assignment (human-reviewed) → Design → Dev/QA/Staging.',
+  },
 } as const satisfies Record<string, FlagDefinition>;
 
 export type FlagName = keyof typeof FLAGS;

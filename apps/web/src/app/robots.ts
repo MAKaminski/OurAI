@@ -18,7 +18,16 @@ const AI_BOTS = [
 
 export default function robots(): MetadataRoute.Robots {
   // Private / auth-gated surfaces — kept out of every crawler's index.
-  const disallow = ['/api/', '/account', '/auth/', '/learn', '/chat', '/context', '/companies'];
+  const disallow = [
+    '/api/',
+    '/account',
+    '/auth/',
+    '/learn',
+    '/chat',
+    '/context',
+    '/companies',
+    '/connections',
+  ];
   return {
     rules: [
       { userAgent: '*', allow: '/', disallow },
